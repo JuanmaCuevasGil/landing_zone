@@ -80,3 +80,15 @@ module "mybucket" {
   source      = "./modulos/s3"
   bucket_name = "nombreunico12345678901"
 }
+
+module "myinstances" {
+  source = "./modulos/ec2"
+
+  instance_name       = var.instance_name
+  ec2_specs           = var.ec2_specs
+  subnet_id           = aws_subnet.public_subnet.id
+  key_name            = data.aws_key_pair.key.key_name
+  sg_id               = aws_security_group.sg_public_instance.id
+  enable_monitoring   = var.enable_monitoring
+  suffix              = local.sufix
+}
