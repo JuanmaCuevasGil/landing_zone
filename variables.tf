@@ -1,30 +1,50 @@
-variable "private_subnets" {
-  type = map
-  default = {
-    a = "10.0.1.0/24"
-    b = "10.0.2.0/24"
-    c = "10.0.3.0/24"
-  }
+variable "estocolmo_cidr" {
+  description = "CIDR Estocolmo"
+  type        = string
 }
 
+/* variable "public_subnet" {
+    description = "CIDR public subnet"
+    type = string
+}
+
+variable "private_subnet" {
+    description = "CIDR private subnet"
+    type = string
+} */
+
 variable "subnets" {
-  description = "Default values for public subnets."
-  type        = map
-  default = {
-    a = "10.0.1.0/24"
-    b = "10.0.2.0/24"
-    c = "10.0.3.0/24"
-  }
+  description = "Lista de subnets"
+  type        = list(string)
 }
 
 variable "tags" {
-  description = "Default tags to apply to all resources."
-  type        = map(any)
+  description = "value"
+  type        = map(string)
 }
 
-variable "vpc_cidr" {
-  description = "The network addressing for the default VPC."
+variable "sg_ingress_cidr" {
+  description = "CIDR for ingress traffic"
   type        = string
-  default     = "10.0.0.0/16"
 }
 
+variable "ec2_specs" {
+  description = "Parámetros de la instancia"
+  type        = map(string)
+
+}
+
+variable "instancias" {
+  description = "Nombre de las instancias"
+  type        = set(string)
+}
+
+variable "enable_monitoring" {
+  description = "Habilita el despliegue de un servidor de monitoreo"
+  type        = number
+}
+
+variable "ingress_port_list" {
+  description = "Lista de puertos de ingress"
+  type = list(number)
+}

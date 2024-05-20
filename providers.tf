@@ -1,17 +1,20 @@
 terraform {
   required_providers {
     aws = {
-      version = "= 5.33.0"
+      source  = "hashicorp/aws"
+      version = ">=4.36.0, <4.47.0, !=4.43.0"
+    }
+    random = {
+      source = "hashicorp/random"
+      version = "3.6.1"
     }
   }
+  required_version = "~>1.5.0"
 }
 
-# Brainboard aliases for AWS regions
 provider "aws" {
-  alias  = "eu-north-1"
   region = "eu-north-1"
-}
-provider "aws" {
-  alias  = "us-east-2"
-  region = "us-east-2"
+  default_tags {
+    tags = var.tags
+  }
 }
