@@ -3,11 +3,11 @@ locals {
 }
 
 resource "random_string" "sufijo-s3" {
-  length = 8
+  length  = 8
   special = false
-  upper = false
+  upper   = false
 }
 
 locals {
-  s3-sufix="${var.tags.project}-${random_string.sufijo-s3.id}"
+  s3-sufix = "${var.tags.project}-${random_string.sufijo-s3.id}"
 }

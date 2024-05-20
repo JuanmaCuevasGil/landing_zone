@@ -1,5 +1,5 @@
 resource "aws_instance" "public_instance" {
-  for_each               = var.instancias
+  for_each               = var.instance_name
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.instance_type
   subnet_id              = aws_subnet.public_subnet.id
@@ -12,7 +12,7 @@ resource "aws_instance" "public_instance" {
 }
 
 resource "aws_instance" "monitoring_instance" {
-  count                  = var.enable_monitoring == 1 ? 1 : 0
+  count                  = var.enable_monitoring == true? 1:0
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.instance_type
   subnet_id              = aws_subnet.public_subnet.id

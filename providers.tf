@@ -5,7 +5,7 @@ terraform {
       version = ">=4.36.0, <4.47.0, !=4.43.0"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "3.6.1"
     }
   }
@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-north-1"
+  region = var.region["virginia"]
   default_tags {
     tags = var.tags
   }

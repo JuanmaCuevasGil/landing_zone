@@ -1,21 +1,21 @@
-variable "estocolmo_cidr" {
-  description = "CIDR Estocolmo"
-  type        = string
+variable "region" {
+  description = "Región"
+  type        = map(string)
 }
 
-/* variable "public_subnet" {
-    description = "CIDR public subnet"
-    type = string
+variable "cidr_map" {
+  description = "CIDR map"
+  type        = map(string)
 }
 
-variable "private_subnet" {
-    description = "CIDR private subnet"
-    type = string
-} */
+variable "ports" {
+  type        = map(number)
+  description = "Ports"
+}
 
-variable "subnets" {
-  description = "Lista de subnets"
-  type        = list(string)
+variable "protocols" {
+  type        = map(any)
+  description = "Protocol used"
 }
 
 variable "tags" {
@@ -23,28 +23,22 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "sg_ingress_cidr" {
-  description = "CIDR for ingress traffic"
-  type        = string
-}
-
 variable "ec2_specs" {
-  description = "Parámetros de la instancia"
+  description = "Parameters of the instance"
   type        = map(string)
-
 }
 
-variable "instancias" {
-  description = "Nombre de las instancias"
+variable "instance_name" {
+  description = "Name of the instances"
   type        = set(string)
 }
 
 variable "enable_monitoring" {
-  description = "Habilita el despliegue de un servidor de monitoreo"
-  type        = number
+  description = "Enables the deployment of monitoring"
+  type        = bool
 }
 
 variable "ingress_port_list" {
   description = "Lista de puertos de ingress"
-  type = list(number)
+  type        = list(number)
 }
