@@ -1,5 +1,5 @@
 locals {
-  sufix = "${var.tags.project}-${var.tags.env}" #recurso-proyecto-prod-región
+  suffix = "${var.tags.project}-${var.tags.env}" #recurso-proyecto-prod-región
 }
 
 resource "random_string" "sufijo-s3" {

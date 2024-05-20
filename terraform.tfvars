@@ -27,13 +27,13 @@ tags = {
   "cloud"       = "AWS"
   "IaC"         = "Terraform"
   "IaC_Version" = "1.5.7"
-  "project"     = "Landing zone"
+  "project"     = "landing-zone"
   "region"      = "virginia"
 }
 
 ec2_specs = {
-  "ami"           = "ami-0a63bd9c44af62f91"
-  "instance_type" = "t3.micro"
+  "ami"           = "ami-0bb84b8ffd87024d8"
+  "instance_type" = "t2.micro"
 }
 
 instance_name = [
