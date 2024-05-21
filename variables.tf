@@ -52,4 +52,3 @@ variable "iam_groups" {
   description = "Mapa de los grupos"
   type = map(string)
 }
-
