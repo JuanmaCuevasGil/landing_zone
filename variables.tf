@@ -14,7 +14,7 @@ variable "ports" {
 }
 
 variable "protocols" {
-  type        = map(string)
+  type        = map(any)
   description = "Protocol used"
 }
 
@@ -42,3 +42,14 @@ variable "ingress_port_list" {
   description = "Lista de puertos de ingress"
   type        = list(number)
 }
+
+variable "iam_users" {
+  description = "Usuarios IAM"
+  type = map(set(string))
+}
+
+variable "iam_groups" {
+  description = "Mapa de los grupos"
+  type = map(string)
+}
+

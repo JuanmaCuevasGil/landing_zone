@@ -1,10 +1,8 @@
-# Creation of a S3 bucket with a randomly generated suffix and appended to the project name
 module "mybucket" {
   source      = "./modules/s3"
   bucket_name = local.s3-sufix
 }
 
-# Creation of a number of instances defined in tfvars based on the quantity of names entered
 module "myinstances" {
   source = "./modules/ec2"
 
@@ -19,9 +17,6 @@ module "myinstances" {
   suffix            = local.suffix
 }
 
-# This module various parameters to the module, including cidr_map for IP addresses, 
-# suffix as a suffix, ingress_port_list for the list of incoming ports, and maps of 
-# protocols and ports with specific values for TCP and ports.
 module "network" {
   source = "./modules/vpc"
 
@@ -31,4 +26,15 @@ module "network" {
   ingress_port_list = var.ingress_port_list
   protocols = var.protocols
   ports = var.ports
+}
+
+module "iam_groups" {
+  source = "./modules/iam_groups"
+  iam_groups = var.iam_groups
+}
+
+module "iam_users" {
+  source = "./modules/iam_users"
+  iam_users = var.iam_users
+  iam_groups = var.iam_groups
 }
