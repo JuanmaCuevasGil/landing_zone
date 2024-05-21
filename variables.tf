@@ -1,4 +1,3 @@
-#Comentario prueba
 variable "region" {
   description = "Región"
   type        = map(string)
@@ -43,6 +42,3 @@ variable "ingress_port_list" {
   description = "Lista de puertos de ingress"
   type        = list(number)
 }
-
-
-#casdñlaskfjñasd
