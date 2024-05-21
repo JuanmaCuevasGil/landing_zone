@@ -40,7 +40,7 @@ resource "aws_route_table" "public" {
 
   route {
     cidr_block = var.cidr_map["any"]
-    gateway_id = aws_internet_gateway.vpc_virginia.id
+    gateway_id = aws_internet_gateway.ig_virginia.id
   }
 
   tags = {
@@ -73,8 +73,8 @@ resource "aws_security_group" "public_instance" {
   egress {
     from_port        = var.ports["socket"]
     to_port          = var.ports["socket"]
-    protocol         = var.protocols["tcp"]
-    cidr_blocks      = ["0.0.0.0/0"]
+    protocol         = var.ports["any"]
+    cidr_blocks      = [var.cidr_map["any"]]
     ipv6_cidr_blocks = ["::/0"]
   }
 
