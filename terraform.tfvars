@@ -47,10 +47,11 @@ enable_monitoring = true
 ingress_port_list = [ 22, 80, 443 ]
 
 iam_users = {
-  "admin_user" = ["aws_admin"],
-  "billing_user" = ["aws_billing"],
-  "security_user" = ["aws_security"],
+  "admin_user" = ["aws_admin"]
+  "billing_user" = ["aws_billing"]
+  "security_user" = ["aws_security"]
   "operations_user" = ["aws_operations"]
+  "jacobo2" = ["aws_security"]
 }
 
 iam_groups = {
