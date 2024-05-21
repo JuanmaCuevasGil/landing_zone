@@ -10,9 +10,11 @@ module "myinstances" {
 
   instance_name     = var.instance_name
   ec2_specs         = var.ec2_specs
-  subnet_id         = module.network.public_subnet_id
+  public_subnet_id  = module.network.public_subnet_id
+  private_subnet_id = module.network.private_subnet_id
   key_name          = data.aws_key_pair.key.key_name
-  sg_id             = module.network.public_security_group_id
+  public_sg_id      = module.network.public_security_group_id
+  private_sg_id     = module.network.private_security_group_id
   enable_monitoring = var.enable_monitoring
   suffix            = local.suffix
 }
@@ -27,13 +29,6 @@ module "network" {
 
   suffix            = local.suffix
   ingress_port_list = var.ingress_port_list
-  protocols = {
-    tcp = var.protocols["tcp"]
-    any = var.ports["any"]
-  }
-
-  ports = {
-    socket = var.ports["socket"]
-    any    = var.ports["any"]
-  }
+  protocols = var.protocols
+  ports = var.ports
 }

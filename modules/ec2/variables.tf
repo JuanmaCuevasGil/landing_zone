@@ -11,8 +11,13 @@ variable "ec2_specs" {
   })
 }
 
-variable "subnet_id" {
-  description = "Subnet ID where instances will be launched"
+variable "public_subnet_id" {
+  description = "Public subnet ID where instances will be launched"
+  type        = string
+}
+
+variable "private_subnet_id" {
+  description = "Private subnet ID where instances will be launched"
   type        = string
 }
 
@@ -21,8 +26,13 @@ variable "key_name" {
   type        = string
 }
 
-variable "sg_id" {
-  description = "Security group ID to associate with instances"
+variable "public_sg_id" {
+  description = "Security group ID to associate with public instances"
+  type        = string
+}
+
+variable "private_sg_id" {
+  description = "Security group ID to associate with private instances"
   type        = string
 }
 

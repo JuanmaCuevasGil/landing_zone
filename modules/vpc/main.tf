@@ -73,12 +73,38 @@ resource "aws_security_group" "public_instance" {
   egress {
     from_port        = var.ports["socket"]
     to_port          = var.ports["socket"]
-    protocol         = var.protocols["any"]
+    protocol         = var.protocols["tcp"]
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
     "Name" = "public_instance_sg-${var.suffix}"
+  }
+}
+
+resource "aws_security_group" "private_instance" {
+  name        = "Private Instance SG"
+  description = "Allow SSH inbound traffic and ALL egress traffic"
+  vpc_id      = aws_vpc.this.id
+
+  ingress {
+    from_port        = var.ports["ssh"]
+    to_port          = var.ports["ssh"]
+    protocol         = var.protocols["tcp"]
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = var.ports["ssh"]
+    to_port          = var.ports["ssh"]
+    protocol         = var.protocols["tcp"]
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    "Name" = "private_instance_sg-${var.suffix}"
   }
 }

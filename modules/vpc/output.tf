@@ -21,3 +21,7 @@ output "public_route_table_id" {
 output "public_security_group_id" {
   value = aws_security_group.public_instance.id
 }
+
+output "private_security_group_id" {
+  value = aws_security_group.private_instance.id
+}

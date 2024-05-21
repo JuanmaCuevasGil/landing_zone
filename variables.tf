@@ -14,7 +14,7 @@ variable "ports" {
 }
 
 variable "protocols" {
-  type        = map(any)
+  type        = map(string)
   description = "Protocol used"
 }
 
