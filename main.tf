@@ -1,6 +1,7 @@
 module "mybucket" {
   source      = "./modules/s3"
   bucket_name = local.s3-sufix
+
 }
 
 module "myinstances" {
@@ -28,7 +29,7 @@ module "network" {
   ports             = var.ports
 }
 
-# Module for managing IAM groups.
+#Module for managing IAM groups.
 module "iam_groups" {
   source     = "./modules/iam_groups"
   iam_groups = var.iam_groups
@@ -41,3 +42,10 @@ module "iam_users" {
   iam_groups = var.iam_groups
 }
 
+resource "aws_flow_log" "example" {
+  log_destination      = module.mybucket.s3_bucket_arn_vpc
+  traffic_type         = "ALL"
+  vpc_id               = module.network.vpc_id
+  log_destination_type = "s3"
+  log_format = "$${version} $${vpc-id}"
+}
