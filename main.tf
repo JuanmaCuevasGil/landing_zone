@@ -32,3 +32,14 @@ module "network" {
   protocols = var.protocols
   ports = var.ports
 }
+
+module "iam_groups" {
+  source = "./modules/iam_groups"
+  iam_groups = var.iam_groups
+}
+
+module "iam_users" {
+  source = "./modules/iam_users"
+  iam_users = var.iam_users
+  iam_groups = var.iam_groups
+}
