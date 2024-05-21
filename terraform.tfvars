@@ -10,15 +10,15 @@ cidr_map = {
 }
 
 ports = {
-  any    = -1
+  any = -1
   socket = 0
-  ssh    = 22
-  http   = 80
-  https  = 443
+  ssh   = 22
+  http  = 80
+  https = 443
 }
 
 protocols = {
-  tcp = "tcp"
+  tcp       = "tcp"
 }
 
 tags = {
@@ -44,18 +44,18 @@ instance_name = [
 
 enable_monitoring = true
 
-ingress_port_list = [22, 80, 443]
+ingress_port_list = [ 22, 80, 443 ]
 
 iam_users = {
-  "admin_user"      = ["aws_admin"],
-  "billing_user"    = ["aws_billing"],
-  "security_user"   = ["aws_security"],
+  "admin_user" = ["aws_admin"],
+  "billing_user" = ["aws_billing"],
+  "security_user" = ["aws_security"],
   "operations_user" = ["aws_operations"]
 }
 
 iam_groups = {
-  "aws_admin"      = "arn:aws:iam::aws:policy/AdministratorAccess"
-  "aws_billing"    = "arn:aws:iam::aws:policy/job-function/Billing"
-  "aws_security"   = "arn:aws:iam::aws:policy/SecurityAudit"
+  "aws_admin" = "arn:aws:iam::aws:policy/AdministratorAccess"
+  "aws_billing" = "arn:aws:iam::aws:policy/job-function/Billing"
+  "aws_security" = "arn:aws:iam::aws:policy/SecurityAudit"
   "aws_operations" = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
