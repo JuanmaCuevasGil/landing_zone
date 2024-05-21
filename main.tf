@@ -29,17 +29,20 @@ module "network" {
 
   suffix            = local.suffix
   ingress_port_list = var.ingress_port_list
-  protocols = var.protocols
-  ports = var.ports
+  protocols         = var.protocols
+  ports             = var.ports
 }
 
+# Module for managing IAM groups.
 module "iam_groups" {
-  source = "./modules/iam_groups"
+  source     = "./modules/iam_groups"
   iam_groups = var.iam_groups
 }
 
+# Module for managing IAM users.
 module "iam_users" {
-  source = "./modules/iam_users"
-  iam_users = var.iam_users
+  source     = "./modules/iam_users"
+  iam_users  = var.iam_users
   iam_groups = var.iam_groups
 }
+
