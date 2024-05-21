@@ -10,15 +10,15 @@ cidr_map = {
 }
 
 ports = {
-  any = -1
+  any    = -1
   socket = 0
-  ssh   = 22
-  http  = 80
-  https = 443
+  ssh    = 22
+  http   = 80
+  https  = 443
 }
 
 protocols = {
-  tcp       = "tcp"
+  tcp = "tcp"
 }
 
 tags = {
@@ -44,4 +44,4 @@ instance_name = [
 
 enable_monitoring = true
 
-ingress_port_list = [ 22, 80, 443 ]
+ingress_port_list = [22, 80, 443]

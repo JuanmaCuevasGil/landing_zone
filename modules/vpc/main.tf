@@ -1,3 +1,4 @@
+# Creation of the VPC in the specified region with randomly generated suffix
 resource "aws_vpc" "this" {
   cidr_block = var.cidr_map["virginia"]
   tags = {
@@ -5,6 +6,7 @@ resource "aws_vpc" "this" {
   }
 }
 
+# Creation of the public network in the specified VPC with randomly generated suffix, instances launched here will receive a public IP
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.cidr_map["public"]
@@ -14,6 +16,7 @@ resource "aws_subnet" "public" {
   }
 }
 
+# Creation of the private network in the specified VPC with randomly generated suffix, launched after the creation of the public subnet
 resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.this.id
   cidr_block = var.cidr_map["private"]
@@ -23,6 +26,7 @@ resource "aws_subnet" "private" {
   depends_on = [aws_subnet.public]
 }
 
+# Creation of the Internet Gateway in the specified VPC with randomly generated suffix
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
@@ -30,6 +34,7 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
+# Creation of a public route table in a specific VPC. The route table includes a route that sends all traffic through an Internet Gateway (IGW).
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
 
@@ -43,11 +48,13 @@ resource "aws_route_table" "public" {
   }
 }
 
+# Asociamos la tabla de enrutamiento a la subnet pública
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
 
+# Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
 resource "aws_security_group" "public_instance" {
   name        = "Public Instance SG"
   description = "Allow SSH inbound traffic and ALL egress traffic"
