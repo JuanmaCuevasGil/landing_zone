@@ -1,3 +1,4 @@
+# Creates an AWS budget for monitoring costs with a $0.01 spending threshold. Notifications are sent via email to the specified address.
 resource "aws_budgets_budget" "zero_spend_budget" {
   name              = var.name
   budget_type       = "COST"
