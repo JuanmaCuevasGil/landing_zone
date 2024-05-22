@@ -24,6 +24,6 @@ resource "aws_instance" "monitoring_instance" {
   vpc_security_group_ids = [var.private_sg_id]
   user_data              = file("${path.module}/scripts/userdata.sh")
   tags = {
-    "Name" = "Monitoreo-${var.suffix}"
+    "Name" = "Monitoring-${var.suffix}"
   }
 }
