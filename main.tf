@@ -55,3 +55,11 @@ module "zero_spend_budget" {
   time_period_end             = "2087-01-01_00:00"
   subscriber_email_addresses  = ["based@yopmail.com"]
 }
+
+# Module to store vpc logs in an S3 bucket
+module "vpc_flow_logs" {
+  source = "./modules/vpc_flow_logs"
+  s3_bucket_arn = module.mybucket.s3_bucket_arn
+  vpc_id = module.network.vpc_id
+  depends_on = [ module.mybucket.s3_bucket_object ]
+}

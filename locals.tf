@@ -9,5 +9,5 @@ resource "random_string" "sufijo-s3" {
 }
 
 locals {
-  s3-sufix = "${var.tags.project}-${random_string.sufijo-s3.id}"
+  s3-sufix = "vpc-flow-logs-${random_string.sufijo-s3.id}"
 }
