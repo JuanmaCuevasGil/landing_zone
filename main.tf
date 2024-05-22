@@ -46,11 +46,3 @@ module "iam_users" {
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
 }
-
-resource "aws_flow_log" "example" {
-  log_destination      = module.mybucket.s3_bucket_arn_vpc
-  traffic_type         = "ALL"
-  vpc_id               = module.network.vpc_id
-  log_destination_type = "s3"
-  log_format = "$${version} $${vpc-id}"
-}
