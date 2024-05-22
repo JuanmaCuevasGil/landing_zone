@@ -49,7 +49,7 @@ module "iam_users" {
 
 # Module for setting up a budget with a $X.XX spending threshold, running from a date to another one. Notifications will be sent to email explicit.
 module "zero_spend_budget" {
-  source = "./budget_module"
+  source = "./modules/budgets"
 
   name                        = "ZeroSpendBudget"
   limit_amount                = "0.01"

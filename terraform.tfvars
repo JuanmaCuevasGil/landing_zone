@@ -44,7 +44,7 @@ instance_name = [
 
 enable_monitoring = true
 
-ingress_port_list = [ 22, 80, 443 ]
+ingress_port_list = [ 22, 80, 443, 1 ]
 
 iam_users = {
   "admin_user" = ["aws_admin"]

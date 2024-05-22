@@ -1,24 +1,24 @@
 variable "name" {
-  description = "Nombre del presupuesto"
+  description = "Budget name"
   type        = string
 }
 
 variable "limit_amount" {
-  description = "Cantidad límite del presupuesto"
+  description = "Budget limit amount"
   type        = string
 }
 
 variable "time_period_start" {
-  description = "Fecha de inicio del período del presupuesto"
+  description = "Budget period start date"
   type        = string
 }
 
 variable "time_period_end" {
-  description = "Fecha de finalización del período del presupuesto"
+  description = "Budget period end date"
   type        = string
 }
 
 variable "subscriber_email_addresses" {
-  description = "Direcciones de correo electrónico de los suscriptores del presupuesto"
+  description = "Budget subscribers' email addresses"
   type        = list(string)
 }
