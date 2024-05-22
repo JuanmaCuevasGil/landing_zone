@@ -46,3 +46,13 @@ module "iam_users" {
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
 }
+
+module "zero_spend_budget" {
+  source = "./budget_module"
+
+  name                        = "ZeroSpendBudget"
+  limit_amount                = "0.01"
+  time_period_start           = "2023-01-01_00:00"
+  time_period_end             = "2087-01-01_00:00"
+  subscriber_email_addresses  = ["juanma@yopmail.com"]
+}
