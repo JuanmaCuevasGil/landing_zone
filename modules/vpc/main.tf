@@ -63,19 +63,18 @@ resource "aws_security_group" "public_instance" {
   dynamic "ingress" {
     for_each = var.ingress_port_list
     content {
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = var.protocols["tcp"]
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = ingress.value.protocol
       cidr_blocks = [var.cidr_map["any"]]
     }
   }
 
   egress {
-    from_port        = var.ports["socket"]
-    to_port          = var.ports["socket"]
-    protocol         = var.ports["any"]
-    cidr_blocks      = [var.cidr_map["any"]]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = var.ports["default"].port
+    to_port     = var.ports["default"].port
+    protocol    = var.ports["default"].protocol
+    cidr_blocks = [var.cidr_map["any"]]
   }
 
   tags = {
@@ -89,19 +88,17 @@ resource "aws_security_group" "private_instance" {
   vpc_id      = aws_vpc.vpc_virginia.id
 
   ingress {
-    from_port        = var.ports["ssh"]
-    to_port          = var.ports["ssh"]
-    protocol         = var.protocols["tcp"]
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = var.ports["ssh"].port
+    to_port     = var.ports["ssh"].port
+    protocol    = var.ports["ssh"].protocol
+    cidr_blocks = [var.cidr_map["any"]]
   }
 
   egress {
-    from_port        = var.ports["ssh"]
-    to_port          = var.ports["ssh"]
-    protocol         = var.protocols["tcp"]
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = var.ports["ssh"].port
+    to_port     = var.ports["ssh"].port
+    protocol    = var.ports["ssh"].protocol
+    cidr_blocks = [var.cidr_map["any"]]
   }
 
   tags = {

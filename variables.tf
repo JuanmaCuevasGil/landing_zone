@@ -9,13 +9,11 @@ variable "cidr_map" {
 }
 
 variable "ports" {
-  type        = map(number)
-  description = "Ports"
-}
-
-variable "protocols" {
-  type        = map(any)
-  description = "Protocol used"
+  type = map(object({
+    port      = number
+    protocol  = string
+  }))
+  description = "Ports & Protocols"
 }
 
 variable "tags" {
@@ -40,7 +38,10 @@ variable "enable_monitoring" {
 
 variable "ingress_port_list" {
   description = "Lista de puertos de ingress"
-  type        = list(number)
+  type        = map(object({
+    port      = number
+    protocol  = string
+  }))
 }
 
 variable "iam_users" {

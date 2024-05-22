@@ -1,6 +1,6 @@
 variable "cidr_map" {
   description = "Map of CIDR blocks for VPC, subnets, etc."
-  type = map(string)
+  type        = map(string)
 }
 
 variable "suffix" {
@@ -10,15 +10,16 @@ variable "suffix" {
 
 variable "ingress_port_list" {
   description = "List of ingress ports for the security group"
-  type        = list(number)
-}
-
-variable "protocols" {
-  description = "Map of protocols used in security group"
-  type = map(string)
+  type = map(object({
+    port     = number
+    protocol = string
+  }))
 }
 
 variable "ports" {
   description = "Map of ports used in security group"
-  type = map(number)
+  type = map(object({
+    port     = number
+    protocol = string
+  }))
 }

@@ -30,7 +30,6 @@ module "network" {
 
   suffix            = local.suffix
   ingress_port_list = var.ingress_port_list
-  protocols         = var.protocols
   ports             = var.ports
 }
 
@@ -52,7 +51,7 @@ module "zero_spend_budget" {
   source = "./modules/budgets"
 
   name                        = "ZeroSpendBudget"
-  limit_amount                = "0.01"
+  limit_amount                = "1.00"
   time_period_start           = "2023-01-01_00:00"
   time_period_end             = "2087-01-01_00:00"
   subscriber_email_addresses  = ["based@yopmail.com"]
