@@ -36,14 +36,6 @@ variable "enable_monitoring" {
   type        = bool
 }
 
-variable "ingress_port_list" {
-  description = "Lista de puertos de ingress"
-  type        = map(object({
-    port      = number
-    protocol  = string
-  }))
-}
-
 variable "iam_users" {
   description = "Usuarios IAM"
   type = map(set(string))

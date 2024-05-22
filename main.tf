@@ -29,7 +29,6 @@ module "network" {
   cidr_map = var.cidr_map
 
   suffix            = local.suffix
-  ingress_port_list = var.ingress_port_list
   ports             = var.ports
 }
 

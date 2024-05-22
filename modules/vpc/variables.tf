@@ -8,14 +8,6 @@ variable "suffix" {
   type        = string
 }
 
-variable "ingress_port_list" {
-  description = "List of ingress ports for the security group"
-  type = map(object({
-    port     = number
-    protocol = string
-  }))
-}
-
 variable "ports" {
   description = "Map of ports used in security group"
   type = map(object({

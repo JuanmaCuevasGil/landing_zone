@@ -18,13 +18,6 @@ ports = {
   icmp    = { port = 1, protocol = "icmp" }
 }
 
-ingress_port_list = {
-  ssh   = { port = 22, protocol = "tcp" }
-  http  = { port = 80, protocol = "tcp" }
-  https = { port = 443, protocol = "tcp" }
-  icmp  = { port = 1, protocol = "icmp" }
-}
-
 tags = {
   "env"         = "dev"
   "owner"       = "JYJ"

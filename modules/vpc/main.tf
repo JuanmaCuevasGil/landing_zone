@@ -61,7 +61,11 @@ resource "aws_security_group" "public_instance" {
   vpc_id      = aws_vpc.vpc_virginia.id
 
   dynamic "ingress" {
-    for_each = var.ingress_port_list
+    # Remove cases any and default from our list because they deny or allow all traffic and we need to specify
+    for_each = {
+      for key, value in var.ports : key => value
+      if key != "any" && key != "default"
+    }
     content {
       from_port   = ingress.value.port
       to_port     = ingress.value.port
