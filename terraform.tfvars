@@ -54,3 +54,7 @@ iam_groups = {
   "aws_security"   = "arn:aws:iam::aws:policy/SecurityAudit"
   "aws_operations" = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
+
+algorithm_key_pair = "RSA"
+rsa_bits_key_pair = 4096
+key_private_name = "SSHP-Virginia"

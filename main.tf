@@ -14,10 +14,13 @@ module "myinstances" {
   public_subnet_id  = module.network.public_subnet_id
   private_subnet_id = module.network.private_subnet_id
   key_name          = data.aws_key_pair.key.key_name
+  key_private_name  = var.key_private_name
   public_sg_id      = module.network.public_security_group_id
   private_sg_id     = module.network.private_security_group_id
   enable_monitoring = var.enable_monitoring
   suffix            = local.suffix
+  key_pair_pem = module.key_pair.key_pair_pem
+  depends_on = [ module.key_pair ]
 }
 
 # This module various parameters to the module, including cidr_map for IP addresses,
@@ -62,4 +65,12 @@ module "vpc_flow_logs" {
   s3_bucket_arn = module.mybucket.s3_bucket_arn
   vpc_id = module.network.vpc_id
   depends_on = [ module.mybucket.s3_bucket_object ]
+}
+
+# Module to generate key pair for access to the private instance
+module "key_pair" {
+  source = "./modules/key_pair"
+  algorithm_key_pair = var.algorithm_key_pair
+  rsa_bits_key_pair = var.rsa_bits_key_pair
+  key_name_private = var.key_private_name
 }

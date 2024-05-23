@@ -22,7 +22,11 @@ variable "private_subnet_id" {
 }
 
 variable "key_name" {
-  description = "Key pair name to access instances"
+  description = "Key pair name to access public instances"
+  type        = string
+}
+variable "key_private_name" {
+  description = "Key pair name to access private instances"
   type        = string
 }
 
@@ -44,4 +48,9 @@ variable "enable_monitoring" {
 variable "suffix" {
   description = "Suffix to append to instance names"
   type        = string
+}
+
+variable "key_pair_pem" {
+  description = "Name Key Pair"
+  type = string
 }
