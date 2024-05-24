@@ -3,6 +3,8 @@ module "mybucket" {
   source      = "./modules/s3"
   bucket_name = local.s3-sufix
   instance_arn = module.myinstances.private_instance_arn
+  config_time = var.bucket_config
+
 }
 
 # Creation of a number of instances defined in tfvars based on the quantity of names entered

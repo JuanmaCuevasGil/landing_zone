@@ -9,8 +9,3 @@ output "user_access_key" {
   }
   sensitive = true
 }
-
-output "iam_user_passwords" {
-  value = { for k, v in random_password.user_passwords : k => v.result }
-  sensitive = true
-}
