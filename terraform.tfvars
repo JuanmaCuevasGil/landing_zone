@@ -29,7 +29,7 @@ tags = {
 }
 
 ec2_specs = {
-  "ami"           = "ami-0bb84b8ffd87024d8"
+  "ami"           = "ami-0e001c9271cf7f3b9"
   "instance_type" = "t2.micro"
 }
 

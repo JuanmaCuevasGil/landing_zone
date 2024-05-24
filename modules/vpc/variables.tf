@@ -15,3 +15,8 @@ variable "ports" {
     protocol = string
   }))
 }
+
+variable "private_ip" {
+  description = "Private IP of jumpserver"
+  type = string
+}

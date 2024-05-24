@@ -9,3 +9,13 @@ output "monitoring_instance_id" {
   description = "ID of the monitoring instance"
   value       = aws_instance.monitoring_instance[0].id
 }
+
+output "private_ip" {
+  description = "IDs of the public instances"
+  value       = { for k, v in aws_instance.public_instance : k => v.private_ip }
+}
+
+output "private_instance_arn" {
+  description = "IDs of the public instances"
+  value       = aws_instance.monitoring_instance[0].arn
+}

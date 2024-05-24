@@ -2,7 +2,7 @@
 module "mybucket" {
   source      = "./modules/s3"
   bucket_name = local.s3-sufix
-
+  instance_arn = module.myinstances.private_instance_arn
 }
 
 # Creation of a number of instances defined in tfvars based on the quantity of names entered
@@ -28,11 +28,10 @@ module "myinstances" {
 # protocols and ports with specific values for TCP and ports.
 module "network" {
   source = "./modules/vpc"
-
   cidr_map = var.cidr_map
-
   suffix            = local.suffix
   ports             = var.ports
+  private_ip = "${module.myinstances.private_ip["jumpserver"]}/32"
 }
 
 #Module for managing IAM groups.
@@ -73,4 +72,10 @@ module "key_pair" {
   algorithm_key_pair = var.algorithm_key_pair
   rsa_bits_key_pair = var.rsa_bits_key_pair
   key_name_private = var.key_private_name
+}
+
+module "policy" {
+  source = "./modules/policy"
+  s3_bucket_arn = module.mybucket.s3_bucket_arn
+  iam_group_name = module.iam_groups.iam_groups_name["aws_security"]
 }

@@ -17,15 +17,23 @@ resource "aws_iam_access_key" "access_key" {
   user = aws_iam_user.users[each.key].name
 }
 
-# Outputs IAM user access keys.
-output "user_access_key" {
-  value = {
-    for user, key in aws_iam_access_key.access_key :
-    user => {
-      access_key_id     = key.id
-      secret_access_key = key.secret
-    }
-  }
-  sensitive = true
+resource "aws_iam_account_password_policy" "account_password_policy" {
+  minimum_password_length       = 12
+  require_lowercase_characters = true
+  require_uppercase_characters = true
+  require_numbers              = true
+  require_symbols              = true
 }
 
+resource "random_password" "user_passwords" {
+  for_each = var.iam_users
+  length   = 16
+  special  = true
+  override_special = "_%@"
+}
+
+resource "aws_iam_user_login_profile" "user_login_profile" {
+  for_each                = aws_iam_user.users
+  user                    = each.value.name
+  password_reset_required = true
+}
