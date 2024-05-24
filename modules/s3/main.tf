@@ -60,38 +60,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket-config" {
     status = "Enabled"
   }
 }
-
-resource "aws_s3_bucket" "versioning_bucket" {
-  bucket = "versioning-${var.bucket_name}"
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "versioning-bucket-config" {
-  # Must have bucket versioning enabled first
-  depends_on = [aws_s3_bucket_versioning.versioning]
-
-  bucket = aws_s3_bucket.versioning_bucket.id
-
-  rule {
-    id = "config"
-
-    filter {
-      prefix = "config/"
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = var.config_time["expiration"]
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = var.config_time["standard_ia"]
-      storage_class   = "STANDARD_IA"
-    }
-
-    noncurrent_version_transition {
-      noncurrent_days = var.config_time["glacier"]
-      storage_class   = "GLACIER"
-    }
-
-    status = "Enabled"
-  }
-}
