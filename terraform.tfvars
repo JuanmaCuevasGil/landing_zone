@@ -29,7 +29,7 @@ tags = {
 }
 
 ec2_specs = {
-  "ami"           = "ami-0bb84b8ffd87024d8"
+  "ami"           = "ami-0e001c9271cf7f3b9"
   "instance_type" = "t2.micro"
 }
 
@@ -58,3 +58,9 @@ iam_groups = {
 algorithm_key_pair = "RSA"
 rsa_bits_key_pair = 4096
 key_private_name = "SSHP-Virginia"
+
+bucket_config = {
+  expiration = 90
+  glacier = 60
+  standard_ia = 30
+}

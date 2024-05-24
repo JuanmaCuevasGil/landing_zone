@@ -27,6 +27,7 @@ resource "aws_instance" "monitoring_instance" {
   subnet_id              = var.private_subnet_id
   key_name               = var.key_private_name
   vpc_security_group_ids = [var.private_sg_id]
+  user_data = file("${path.module}/scripts/monitoring.sh")
   tags = {
     "Name" = "Monitoring-${var.suffix}"
   }
