@@ -61,3 +61,8 @@ variable "key_private_name" {
   description = "Name Key Pair"
   type = string
 }
+
+variable "bucket_config" {
+  description = "Configuration values of the bucket lifecycle"
+  type = map(number)
+}

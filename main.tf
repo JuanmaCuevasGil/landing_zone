@@ -2,6 +2,7 @@
 module "mybucket" {
   source      = "./modules/s3"
   bucket_name = local.s3-sufix
+  config_time = var.bucket_config
 
 }
 

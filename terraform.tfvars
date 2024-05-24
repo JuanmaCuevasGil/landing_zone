@@ -58,3 +58,9 @@ iam_groups = {
 algorithm_key_pair = "RSA"
 rsa_bits_key_pair = 4096
 key_private_name = "SSHP-Virginia"
+
+bucket_config = {
+  expiration = 90
+  glacier = 60
+  standard_ia = 30
+}
