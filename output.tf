@@ -8,5 +8,6 @@ output "acces_key_iam_users" {
 }
 
 output "password" {
-  value = module.iam_users.encrypted_passwords
+  value = module.iam_users.user_passwords
+  sensitive = true
 }

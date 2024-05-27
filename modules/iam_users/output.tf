@@ -10,16 +10,9 @@ output "user_access_key" {
   sensitive = true
 }
 
-output "encrypted_passwords" {
+# Output the generated passwords
+output "user_passwords" {
   value = {
-    for username, profile in aws_iam_user_login_profile.example :
-    username => <<EOF
-    ----BEGIN PGP MESSAGE-----
-  Version: Keybase OpenPGP v2.1.13
-  Comment: https://keybase.io/crypto
- 
-  ${profile.encrypted_password}
-  -----END PGP MESSAGE-----
-EOF
+    for user_key, _ in aws_iam_user_login_profile.credentials : user_key => aws_iam_user_login_profile.credentials[user_key].password
   }
 }
