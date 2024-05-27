@@ -8,7 +8,17 @@ resource "aws_instance" "public_instance" {
   subnet_id              = var.public_subnet_id
   key_name               = var.key_name
   vpc_security_group_ids = [var.public_sg_id]
-  user_data              = file("${path.module}/scripts/${each.value}.sh")
+  user_data              = each.value != "jumpserver" ? file("${path.module}/scripts/${each.value}.sh") : <<-EOF
+  #!/bin/bash
+  sudo apt update -y
+  sudo apt install firewalld -y
+  sudo firewall-cmd --zone=public --change-interface=eth0 --permanent
+  sudo firewall-cmd --zone=public --add-service=ssh --permanent
+  sudo firewall-cmd --reload
+  sudo mkdir .ssh
+  sudo echo "${var.key_pair_pem}" > /.ssh/${var.key_private_name}.pem
+  sudo chmod 400 .ssh/${var.key_private_name}.pem
+  EOF
   tags = {
     "Name" = "${each.value}-${var.suffix}"
   }
@@ -22,7 +32,7 @@ resource "aws_instance" "monitoring_instance" {
   subnet_id              = var.private_subnet_id
   key_name               = var.key_private_name
   vpc_security_group_ids = [var.private_sg_id]
-  user_data = file("${path.module}/scripts/monitoring.sh")
+  user_data              = file("${path.module}/scripts/monitoring.sh")
   tags = {
     "Name" = "Monitoring-${var.suffix}"
   }
