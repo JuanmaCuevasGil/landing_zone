@@ -88,7 +88,7 @@ resource "aws_route_table_association" "private" {
 # Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
 resource "aws_security_group" "public_instance" {
   name        = "Public Instance SG"
-  description = "Allow SSH inbound traffic and ALL egress traffic"
+  description = "Allow SSH, IMCP, HTTP, HTTPS inbound traffic and ALL egress traffic"
   vpc_id      = aws_vpc.vpc_virginia.id
 
   dynamic "ingress" {
