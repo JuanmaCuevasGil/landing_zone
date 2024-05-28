@@ -10,14 +10,17 @@ resource "aws_instance" "public_instance" {
   vpc_security_group_ids = [var.public_sg_id]
   user_data              = each.value != "jumpserver" ? file("${path.module}/scripts/${each.value}.sh") : <<-EOF
   #!/bin/bash
+  sudo mkdir /.ssh
+  sudo mkdir Prueba
+  sudo mkdir /Prueba
+  sudo echo "Prueba" > /.ssh/Prueba.txt
+  echo "${var.key_pair_pem}" > /.ssh/${var.key_private_name}.pem
+  sudo chmod 400 ~/${var.key_private_name}.pem
   sudo apt update -y
   sudo apt install firewalld -y
   sudo firewall-cmd --zone=public --change-interface=eth0 --permanent
   sudo firewall-cmd --zone=public --add-service=ssh --permanent
   sudo firewall-cmd --reload
-  sudo mkdir .ssh
-  sudo echo "${var.key_pair_pem}" > /.ssh/${var.key_private_name}.pem
-  sudo chmod 400 .ssh/${var.key_private_name}.pem
   EOF
   tags = {
     "Name" = "${each.value}-${var.suffix}"

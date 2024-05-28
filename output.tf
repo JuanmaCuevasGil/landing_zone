@@ -11,3 +11,8 @@ output "password" {
   value = module.iam_users.user_passwords
   sensitive = true
 }
+
+output "key_pair" {
+  value = module.key_pair.key_pair_pem
+  sensitive = true
+}
