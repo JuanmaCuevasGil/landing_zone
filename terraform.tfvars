@@ -15,7 +15,7 @@ ports = {
   ssh     = { port = 22, protocol = "tcp" }
   http    = { port = 80, protocol = "tcp" }
   https   = { port = 443, protocol = "tcp" }
-  icmp    = { port = 1, protocol = "icmp" }
+  icmp    = { port = -1, protocol = "icmp" }
 }
 
 tags = {
