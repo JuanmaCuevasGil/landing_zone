@@ -36,7 +36,8 @@ ec2_specs = {
 instance_name = [
   "apache",
   "mysql",
-  "jumpserver"
+  "jumpserver",
+  "natinstance"
 ]
 
 enable_monitoring = true

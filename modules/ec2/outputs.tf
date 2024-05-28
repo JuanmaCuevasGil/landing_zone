@@ -19,3 +19,8 @@ output "private_instance_arn" {
   description = "IDs of the public instances"
   value       = aws_instance.monitoring_instance[0].arn
 }
+
+output "network_interface_id" {
+  value = aws_instance.public_instance["natinstance"].primary_network_interface_id
+
+}

@@ -18,5 +18,10 @@ variable "ports" {
 
 variable "private_ip" {
   description = "Private IP of jumpserver"
-  type = string
+  type        = string
+}
+
+variable "nat_instance_id" {
+  description = "Id of the Nat instance"
+  type        = string
 }
