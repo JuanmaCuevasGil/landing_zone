@@ -83,3 +83,11 @@ variable "budget_config" {
     }))
   })
 }
+
+variable "access_key" {
+  description = "Access key for Terraform Cloud"
+}
+
+variable "secret_key" {
+  description = "Secret key for Terraform Cloud"
+}
