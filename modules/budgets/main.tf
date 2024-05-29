@@ -33,7 +33,7 @@ resource "aws_budgets_budget" "zero_spend_budget" {
     notification {
     comparison_operator = "GREATER_THAN"
     notification_type   = "ACTUAL"
-    threshold           = 0.01
+    threshold           = "0.01"
     threshold_type      = "ABSOLUTE_VALUE"
     subscriber_email_addresses = var.subscriber_email_addresses
     subscriber_sns_topic_arns  = []
