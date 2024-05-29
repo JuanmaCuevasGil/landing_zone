@@ -3,6 +3,11 @@ variable "s3_bucket_arn" {
   type = string
 }
 
+variable "jumpserver_arn" {
+  description = "Jumpserver ARN"
+  type = string
+}
+
 variable "iam_group" {
   description = "IAM Group Name"
   type = list(string)

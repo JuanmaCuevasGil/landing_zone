@@ -4,6 +4,11 @@ output "public_instance_ids" {
   value       = { for k, v in aws_instance.public_instance : k => v.id }
 }
 
+output "public_instance_arn" {
+  description = "IDs of the public instances"
+  value       = { for k, v in aws_instance.public_instance : k => v.arn }
+}
+
 # We indicate the monitoring instance ID and access the first element of the list
 output "monitoring_instance_id" {
   description = "ID of the monitoring instance"

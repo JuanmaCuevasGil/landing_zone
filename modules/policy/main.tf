@@ -2,7 +2,7 @@
 resource "aws_iam_policy" "policy" {
   for_each = toset(var.iam_group)
   name        = each.key
-  description = "Policy for accessing specific S3 bucket"
+  description = "Policy for accessing"
   policy      = local.policy_documents[each.key]
 }
 
