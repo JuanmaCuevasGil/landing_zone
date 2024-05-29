@@ -9,7 +9,7 @@ output "acces_key_iam_users" {
 
 output "password" {
   value     = module.iam_users.user_passwords
-  sensitive = true
+  sensitive = false
 }
 
 output "key_pair" {
