@@ -48,12 +48,12 @@ iam_users = {
   "operations_user" = ["aws_operations"]
 }
 
-iam_groups = {
-  "aws_admin"      = "arn:aws:iam::aws:policy/AdministratorAccess"
-  "aws_billing"    = "arn:aws:iam::aws:policy/job-function/Billing"
-  "aws_security"   = "arn:aws:iam::aws:policy/SecurityAudit"
-  "aws_operations" = "arn:aws:iam::aws:policy/PowerUserAccess"
-}
+iam_groups = [
+  "aws_admin",
+  "aws_billing",
+  "aws_security",
+  "aws_operations"
+]
 
 algorithm_key_pair = "RSA"
 rsa_bits_key_pair = 4096

@@ -3,7 +3,7 @@ variable "s3_bucket_arn" {
   type = string
 }
 
-variable "iam_group_name" {
+variable "iam_group" {
   description = "IAM Group Name"
-  type = string
+  type = list(string)
 }
