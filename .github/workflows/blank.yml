@@ -42,13 +42,13 @@ jobs:
         id: apply
         run: terraform apply -auto-approve
 
-      - name: Get Terraform Output
-        id: output
-        run: terraform output password
-
-      - name: Display Password
-        run: echo "The password is ${{ steps.output.outputs.password }}"
-        
       - name: Destroy Terraform
         run: terraform destroy -auto-approve
         if: failure()
+
+      - name: Get Terraform Output
+        id: output
+        run: terraform output password
+        
+      - name: Destroy Terraform
+        run: terraform destroy -auto-approve
