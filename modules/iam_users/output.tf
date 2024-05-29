@@ -9,3 +9,10 @@ output "user_access_key" {
   }
   sensitive = true
 }
+
+# Output the generated passwords
+output "user_passwords" {
+  value = {
+    for user_key, _ in aws_iam_user_login_profile.credentials : user_key => aws_iam_user_login_profile.credentials[user_key].password
+  }
+}

@@ -17,5 +17,10 @@ resource "aws_iam_access_key" "access_key" {
   user = aws_iam_user.users[each.key].name
 }
 
-
-
+ # Take the information of the first login profile
+resource "aws_iam_user_login_profile" "credentials" {
+  for_each = var.iam_users
+  user = each.key 
+  password_reset_required = false
+  depends_on = [ aws_iam_user.users ]
+}
