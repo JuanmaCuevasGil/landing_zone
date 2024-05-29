@@ -1,5 +1,5 @@
 variable "iam_groups" {
   description = "Grupos IAM"
-  type = map(string)
+  type = list(string)
 }
 

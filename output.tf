@@ -16,3 +16,7 @@ output "key_pair" {
   value     = module.key_pair.key_pair_pem
   sensitive = true
 }
+
+output "name" {
+  value = module.myinstances.public_instance_arn
+}

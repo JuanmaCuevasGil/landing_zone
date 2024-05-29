@@ -43,7 +43,7 @@ variable "iam_users" {
 
 variable "iam_groups" {
   description = "Mapa de los grupos"
-  type        = map(string)
+  type = list(string)
 }
 
 variable "algorithm_key_pair" {
