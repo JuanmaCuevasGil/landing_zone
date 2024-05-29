@@ -48,3 +48,6 @@ jobs:
 
       - name: Display Password
         run: echo "The password is ${{ steps.output.outputs.password }}"
+
+      - name: Destroy Terraform
+        run: terraform destroy -auto-approve
