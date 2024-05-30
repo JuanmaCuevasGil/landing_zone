@@ -47,13 +47,13 @@ module "iam_users" {
   source     = "./modules/iam_users"
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
-  depends_on = [ module.iam_groups ]
+  depends_on = [module.iam_groups]
 }
 
 # Module for setting up a budget with a $X.XX spending threshold, running from a date to another one. Notifications will be sent to email explicit.
 module "zero_spend_budget" {
-  source        = "./modules/budgets"
-  budget_config = var.budget_config
+  source  = "./modules/budgets"
+  budgets = var.budgets
 }
 
 # Module to store vpc logs in an S3 bucket
@@ -73,10 +73,10 @@ module "key_pair" {
 }
 
 module "policy" {
-  source = "./modules/policy"
-  s3_bucket_arn = module.mybucket.s3_bucket_arn
-  iam_group = var.iam_groups
-  depends_on = [ module.iam_groups ]
+  source         = "./modules/policy"
+  s3_bucket_arn  = module.mybucket.s3_bucket_arn
+  iam_group      = var.iam_groups
+  depends_on     = [module.iam_groups]
   jumpserver_arn = module.myinstances.public_instance_arn["jumpserver"]
 }
 

@@ -43,7 +43,7 @@ variable "iam_users" {
 
 variable "iam_groups" {
   description = "Mapa de los grupos"
-  type = list(string)
+  type        = list(string)
 }
 
 variable "algorithm_key_pair" {
@@ -67,9 +67,19 @@ variable "bucket_config" {
   type        = map(number)
 }
 
-variable "budget_config" {
-  description = "Configuration values of the budget"
-  type = object({
+
+
+variable "access_key" {
+  description = "Access key for Terraform Cloud"
+}
+
+variable "secret_key" {
+  description = "Secret key for Terraform Cloud"
+}
+
+variable "budgets" {
+  description = "List of budgets and their configurations"
+  type = list(object({
     budget_name              = string
     budget_limit_amount      = string
     budget_time_period_start = string
@@ -81,13 +91,5 @@ variable "budget_config" {
       threshold_type                    = string
       budget_subscriber_email_addresses = list(string)
     }))
-  })
-}
-
-variable "access_key" {
-  description = "Access key for Terraform Cloud"
-}
-
-variable "secret_key" {
-  description = "Secret key for Terraform Cloud"
+  }))
 }

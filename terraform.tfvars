@@ -65,23 +65,37 @@ bucket_config = {
   standard_ia = 30
 }
 
-budget_config = {
-  "budget_name"              = "ZeroSpendBudget"
-  "budget_limit_amount"      = "1.00"
-  "budget_time_period_start" = "2023-01-01_00:00"
-  "budget_time_period_end"   = "2087-01-01_00:00"
-  "budget_notifications" = [{
-    comparison_operator               = "GREATER_THAN"
-    notification_type                 = "ACTUAL"
-    threshold                         = 10
-    threshold_type                    = "PERCENTAGE"
-    budget_subscriber_email_addresses = ["based@yopmail.com"]
-    }, {
-    comparison_operator               = "GREATER_THAN"
-    notification_type                 = "ACTUAL"
-    threshold                         = 0.01
-    threshold_type                    = "ABSOLUTE_VALUE"
-    budget_subscriber_email_addresses = ["based@yopmail.com"]
-    }
-  ]
-}
+budgets = [
+  {
+    budget_name              = "ZeroSpendBudget"
+    budget_limit_amount      = "1.00"
+    budget_time_period_start = "2023-01-01_00:00"
+    budget_time_period_end   = "2087-01-01_00:00"
+    budget_notifications = [{
+      comparison_operator               = "GREATER_THAN"
+      notification_type                 = "ACTUAL"
+      threshold                         = 10
+      threshold_type                    = "PERCENTAGE"
+      budget_subscriber_email_addresses = ["based@yopmail.com"]
+      }, {
+      comparison_operator               = "GREATER_THAN"
+      notification_type                 = "ACTUAL"
+      threshold                         = 0.01
+      threshold_type                    = "ABSOLUTE_VALUE"
+      budget_subscriber_email_addresses = ["based@yopmail.com"]
+    }]
+  },
+  {
+    budget_name              = "AnotherBudget"
+    budget_limit_amount      = "500.00"
+    budget_time_period_start = "2023-01-01_00:00"
+    budget_time_period_end   = "2087-01-01_00:00"
+    budget_notifications = [{
+      comparison_operator               = "GREATER_THAN"
+      notification_type                 = "ACTUAL"
+      threshold                         = 50
+      threshold_type                    = "PERCENTAGE"
+      budget_subscriber_email_addresses = ["another@yopmail.com"]
+    }]
+  }
+]
