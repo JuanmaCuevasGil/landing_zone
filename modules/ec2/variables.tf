@@ -50,7 +50,12 @@ variable "suffix" {
   type        = string
 }
 
-variable "key_pair_pem" {
-  description = "Name Key Pair"
+variable "key_pair_pem_public" {
+  description = "Name Key Pair Public"
+  type = string
+}
+
+variable "key_pair_pem_private" {
+  description = "Name Key Pair Private"
   type = string
 }

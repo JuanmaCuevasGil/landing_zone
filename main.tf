@@ -15,14 +15,16 @@ module "myinstances" {
   ec2_specs         = var.ec2_specs
   public_subnet_id  = module.network.public_subnet_id
   private_subnet_id = module.network.private_subnet_id
-  key_name          = data.aws_key_pair.key.key_name
+  key_name          = var.key_name
   key_private_name  = var.key_private_name
   public_sg_id      = module.network.public_security_group_id
   private_sg_id     = module.network.private_security_group_id
   enable_monitoring = var.enable_monitoring
   suffix            = local.suffix
-  key_pair_pem      = module.key_pair.key_pair_pem
+  key_pair_pem_public      = module.key_pair.key_pair_pem_public
+  key_pair_pem_private = module.key_pair.key_pair_pem_private
   depends_on        = [module.key_pair]
+  
 }
 
 # This module various parameters to the module, including cidr_map for IP addresses,
@@ -70,6 +72,7 @@ module "key_pair" {
   algorithm_key_pair = var.algorithm_key_pair
   rsa_bits_key_pair  = var.rsa_bits_key_pair
   key_name_private   = var.key_private_name
+  key_name = var.key_name
 }
 
 module "policy" {
@@ -80,3 +83,12 @@ module "policy" {
   jumpserver_arn = module.myinstances.public_instance_arn["jumpserver"]
 }
 
+resource "local_file" "publickey" {
+  content = module.key_pair.key_pair_pem_private
+  filename = "./pem/SSH-Virginia.pem"
+}
+
+resource "local_file" "privatekey" {
+  content = module.key_pair.key_pair_pem_private
+  filename = "./pem/SSHP-Virginia.pem"
+}

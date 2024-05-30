@@ -13,3 +13,8 @@ variable "key_name_private" {
   description = "Name Key Pair"
   type = string
 }
+
+variable "key_name" {
+  description = "Name Key Pair Public"
+  type = string
+}
