@@ -36,7 +36,7 @@ resource "aws_internet_gateway" "ig_virginia" {
 
 # Random Elastic IP
 resource "aws_eip" "my_eip" {
-  vpc      = true
+
 }
 
 # NAT Gateway for private subnet
