@@ -83,12 +83,12 @@ module "policy" {
   jumpserver_arn = module.myinstances.public_instance_arn["jumpserver"]
 }
 
-resource "local_file" "name" {
+resource "local_file" "publickey" {
   content = module.key_pair.key_pair_pem_private
   filename = "./pem/SSH-Virginia.pem"
 }
 
-resource "local_file" "name" {
+resource "local_file" "privatekey" {
   content = module.key_pair.key_pair_pem_private
   filename = "./pem/SSHP-Virginia.pem"
 }
