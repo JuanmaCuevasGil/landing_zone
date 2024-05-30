@@ -11,9 +11,14 @@ output "password" {
   value     = module.iam_users.user_passwords
   sensitive = true
 }
-# comentario del output prueba
-output "key_pair" {
-  value     = module.key_pair.key_pair_pem
+
+output "key_pair_public" {
+  value     = replace(module.key_pair.key_pair_pem_public, "\\n", "\n")
+  sensitive = true
+}
+
+output "key_pair_private" {
+  value     = module.key_pair.key_pair_pem_private
   sensitive = true
 }
 

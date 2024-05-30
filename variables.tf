@@ -57,6 +57,11 @@ variable "rsa_bits_key_pair" {
   type        = number
 }
 
+variable "key_name" {
+  description = "Name Key Pair public"
+  type        = string
+}
+
 variable "key_private_name" {
   description = "Name Key Pair"
   type        = string
