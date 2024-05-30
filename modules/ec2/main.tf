@@ -12,9 +12,6 @@ resource "aws_instance" "public_instance" {
   #!/bin/bash
   sudo su -
   mkdir /.ssh
-  mkdir Prueba
-  mkdir /Prueba
-  echo "Prueba" > /.ssh/Prueba.txt
   echo "${var.key_pair_pem}" > /.ssh/${var.key_private_name}.pem
   chmod 400 ~/${var.key_private_name}.pem
   apt update -y
