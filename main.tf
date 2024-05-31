@@ -2,7 +2,7 @@
 module "mybucket" {
   source       = "./modules/s3"
   bucket_name  = local.s3-sufix
-  instance_arn = module.myinstances.private_instance_arn
+  instance_arn = module.myinstances.monitoring_instance_arn
   config_time  = var.bucket_config
 
 }
@@ -15,16 +15,14 @@ module "myinstances" {
   ec2_specs         = var.ec2_specs
   public_subnet_id  = module.network.public_subnet_id
   private_subnet_id = module.network.private_subnet_id
-  key_name          = var.key_name
-  key_private_name  = var.key_private_name
+  keys              = var.keys
   public_sg_id      = module.network.public_security_group_id
   private_sg_id     = module.network.private_security_group_id
   enable_monitoring = var.enable_monitoring
   suffix            = local.suffix
-  key_pair_pem_public      = module.key_pair.key_pair_pem_public
-  key_pair_pem_private = module.key_pair.key_pair_pem_private
+  key_pair_pem      = module.key_pair.key_pair_pem
   depends_on        = [module.key_pair]
-  
+
 }
 
 # This module various parameters to the module, including cidr_map for IP addresses,
@@ -49,7 +47,7 @@ module "iam_users" {
   source     = "./modules/iam_users"
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
-  depends_on = [ module.iam_groups ]
+  depends_on = [module.iam_groups]
 }
 
 # Module for setting up a budget with a $X.XX spending threshold, running from a date to another one. Notifications will be sent to email explicit.
@@ -68,27 +66,14 @@ module "vpc_flow_logs" {
 
 # Module to generate key pair for access to the private instance
 module "key_pair" {
-  source             = "./modules/key_pair"
-  algorithm_key_pair = var.algorithm_key_pair
-  rsa_bits_key_pair  = var.rsa_bits_key_pair
-  key_name_private   = var.key_private_name
-  key_name = var.key_name
+  source = "./modules/key_pair"
+  keys   = var.keys
 }
 
 module "policy" {
-  source = "./modules/policy"
-  s3_bucket_arn = module.mybucket.s3_bucket_arn
-  iam_group = var.iam_groups
-  depends_on = [ module.iam_groups ]
-  jumpserver_arn = module.myinstances.public_instance_arn["jumpserver"]
-}
-
-resource "local_file" "publickey" {
-  content = module.key_pair.key_pair_pem_private
-  filename = "./pem/SSH-Virginia.pem"
-}
-
-resource "local_file" "privatekey" {
-  content = module.key_pair.key_pair_pem_private
-  filename = "./pem/SSHP-Virginia.pem"
+  source         = "./modules/policy"
+  s3_bucket_arn  = module.mybucket.s3_bucket_arn
+  iam_group      = var.iam_groups
+  depends_on     = [module.iam_groups]
+  jumpserver_arn = module.myinstances.public_instance_arns["jumpserver"]
 }

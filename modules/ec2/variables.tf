@@ -6,8 +6,8 @@ variable "instance_name" {
 variable "ec2_specs" {
   description = "EC2 specifications including AMI and instance type"
   type = object({
-    ami            = string
-    instance_type  = string
+    ami           = string
+    instance_type = string
   })
 }
 
@@ -18,15 +18,6 @@ variable "public_subnet_id" {
 
 variable "private_subnet_id" {
   description = "Private subnet ID where instances will be launched"
-  type        = string
-}
-
-variable "key_name" {
-  description = "Key pair name to access public instances"
-  type        = string
-}
-variable "key_private_name" {
-  description = "Key pair name to access private instances"
   type        = string
 }
 
@@ -50,12 +41,22 @@ variable "suffix" {
   type        = string
 }
 
-variable "key_pair_pem_public" {
-  description = "Name Key Pair Public"
-  type = string
+variable "keys" {
+  description = "Keys configuration values"
+  type = object({
+    algorithm = string
+    rsa_bits  = number
+    key_name  = map(string)
+  })
 }
 
-variable "key_pair_pem_private" {
-  description = "Name Key Pair Private"
-  type = string
+variable "key_pair_pem" {
+  description = "Name Key Pair Public"
+  type = map(object({
+    algorithm          = string
+    rsa_bits           = number
+    private_key_pem    = string
+    public_key_openssh = string
+    public_key_pem     = string
+  }))
 }

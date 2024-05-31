@@ -39,8 +39,8 @@ EOF
   #!/bin/bash
   sudo su -
   mkdir /.ssh
-  echo "${var.key_pair_pem_private}" > /.ssh/${var.key_private_name}.pem
-  chmod 400 ~/${var.key_private_name}.pem
+  echo "${var.key_pair_pem["private"].private_key_pem}" > /.ssh/${var.keys.key_name["private"]}.pem
+  chmod 400 ~/${var.keys.key_name["private"]}.pem
   apt update -y
   apt install firewalld -y
   firewall-cmd --zone=public --change-interface=eth0 --permanent

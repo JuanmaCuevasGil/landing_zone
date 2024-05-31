@@ -1,21 +1,20 @@
 # Define a TLS private key for the Virginia key pair
-resource "tls_private_key" "public_key_pair" {
-  algorithm = var.algorithm_key_pair
-  rsa_bits  = var.rsa_bits_key_pair
-}
-
-resource "tls_private_key" "private_key_pair" {
-  algorithm = var.algorithm_key_pair
-  rsa_bits  = var.rsa_bits_key_pair
+resource "tls_private_key" "tls_key_pair" {
+for_each = var.keys.key_name
+algorithm = var.keys.algorithm
+rsa_bits = var.keys.rsa_bits
 }
 
 # Define an AWS key pair using the Virginia private key
-resource "aws_key_pair" "my_private_key_pair" {
-  key_name   = var.key_name_private
-  public_key = tls_private_key.private_key_pair.public_key_openssh
+resource "aws_key_pair" "key_pair" {
+  for_each = var.keys.key_name
+  key_name   = each.value
+  public_key = tls_private_key.tls_key_pair[each.key].public_key_openssh
 }
 
-resource "aws_key_pair" "my_public_key_pair" {
-  key_name   = var.key_name
-  public_key = tls_private_key.public_key_pair.public_key_openssh
+#Creates a local file with they keys in terraform
+resource "local_file" "publickey" {
+  for_each = var.keys.key_name
+  content  = tls_private_key.tls_key_pair[each.key].private_key_pem
+  filename = "./pem/${each.value}.pem"
 }

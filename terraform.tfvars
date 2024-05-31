@@ -55,10 +55,14 @@ iam_groups = [
   "aws_operations"
 ]
 
-algorithm_key_pair = "RSA"
-rsa_bits_key_pair  = 4096
-key_private_name   = "SSHP-Virginia"
-key_name           = "SSH-Virginia"
+keys = {
+  algorithm = "RSA"
+  rsa_bits = 4096
+  key_name = {
+    public = "SSH-Virginia-Public"
+    private = "SSH-Virginia-Private"
+  }
+}
 
 bucket_config = {
   expiration  = 90

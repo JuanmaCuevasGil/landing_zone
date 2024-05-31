@@ -12,16 +12,11 @@ output "password" {
   sensitive = true
 }
 
-output "key_pair_public" {
-  value     = replace(module.key_pair.key_pair_pem_public, "\\n", "\n")
-  sensitive = true
-}
-
-output "key_pair_private" {
-  value     = module.key_pair.key_pair_pem_private
+output "key_pairs" {
+  value     = module.key_pair.key_pair_pem
   sensitive = true
 }
 
 output "name" {
-  value = module.myinstances.public_instance_arn
+  value = module.myinstances.public_instance_arns
 }

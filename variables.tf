@@ -46,27 +46,6 @@ variable "iam_groups" {
   type = list(string)
 }
 
-variable "algorithm_key_pair" {
-  description = "Algorithm with which the key is encrypted"
-  type        = string
-  sensitive   = true
-}
-
-variable "rsa_bits_key_pair" {
-  description = "Key length"
-  type        = number
-}
-
-variable "key_name" {
-  description = "Name Key Pair public"
-  type        = string
-}
-
-variable "key_private_name" {
-  description = "Name Key Pair"
-  type        = string
-}
-
 variable "bucket_config" {
   description = "Configuration values of the bucket lifecycle"
   type        = map(number)
@@ -95,4 +74,13 @@ variable "access_key" {
 
 variable "secret_key" {
   description = "Secret key for Terraform Cloud"
+}
+
+variable "keys" {
+  description = "Valores para configurar nuestra generación de keys"
+  type = object({
+    algorithm = string 
+    rsa_bits = number
+    key_name = map(string)
+  })
 }

@@ -6,7 +6,7 @@ resource "aws_instance" "public_instance" {
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.instance_type
   subnet_id              = var.public_subnet_id
-  key_name               = var.key_name
+  key_name               = var.keys.key_name["public"]
   vpc_security_group_ids = [var.public_sg_id]
   user_data              = local.scripts[each.value]
   tags = {
@@ -20,7 +20,7 @@ resource "aws_instance" "monitoring_instance" {
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.instance_type
   subnet_id              = var.private_subnet_id
-  key_name               = var.key_private_name
+  key_name               = var.keys.key_name["private"]
   vpc_security_group_ids = [var.private_sg_id]
   user_data              = local.scripts["monitoring"]
   tags = {
