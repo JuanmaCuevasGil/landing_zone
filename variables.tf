@@ -75,22 +75,14 @@ variable "budgets" {
       threshold_type                    = string
       budget_subscriber_email_addresses = list(string)
     }))
-  })
-}
-
-variable "access_key" {
-  description = "Access key for Terraform Cloud"
-}
-
-variable "secret_key" {
-  description = "Secret key for Terraform Cloud"
+  }))
 }
 
 variable "keys" {
   description = "Valores para configurar nuestra generación de keys"
   type = object({
-    algorithm = string 
-    rsa_bits = number
-    key_name = map(string)
+    algorithm = string
+    rsa_bits  = number
+    key_name  = map(string)
   })
 }

@@ -57,9 +57,9 @@ iam_groups = [
 
 keys = {
   algorithm = "RSA"
-  rsa_bits = 4096
+  rsa_bits  = 4096
   key_name = {
-    public = "SSH-Virginia-Public"
+    public  = "SSH-Virginia-Public"
     private = "SSH-Virginia-Private"
   }
 }

@@ -48,7 +48,6 @@ module "iam_users" {
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
   depends_on = [module.iam_groups]
-  depends_on = [module.iam_groups]
 }
 
 # Module for setting up a budget with a $X.XX spending threshold, running from a date to another one. Notifications will be sent to email explicit.
