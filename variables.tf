@@ -51,15 +51,13 @@ variable "bucket_config" {
   type        = map(number)
 }
 
+# variable "access_key" {
+#   description = "Access key for Terraform Cloud"
+# }
 
-
-variable "access_key" {
-  description = "Access key for Terraform Cloud"
-}
-
-variable "secret_key" {
-  description = "Secret key for Terraform Cloud"
-}
+# variable "secret_key" {
+#   description = "Secret key for Terraform Cloud"
+# }
 
 variable "budgets" {
   description = "List of budgets and their configurations"

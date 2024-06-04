@@ -1,6 +1,9 @@
 output "vpc_id" {
   value = aws_vpc.vpc_virginia.id
 }
+output "vpn_id" {
+  value = aws_vpc.virginia_vpn.id
+}
 
 output "public_subnet_id" {
   value = aws_subnet.public.id
@@ -19,9 +22,9 @@ output "public_route_table_id" {
 }
 
 output "public_security_group_id" {
-  value = aws_security_group.public_instance.id
+  value = var.pub_sg_virginia_id
 }
 
 output "private_security_group_id" {
-  value = aws_security_group.private_instance.id
+  value = var.priv_sg_virginia_id
 }

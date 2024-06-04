@@ -20,3 +20,18 @@ variable "private_ip" {
   description = "Private IP of jumpserver"
   type = string
 }
+
+variable "sg_vpn_id" {
+  description = "Security Group VPN"
+  type = string
+}
+
+variable "pub_sg_virginia_id" {
+  description = "ID Public Security Group Virginia"
+  type = string
+}
+
+variable "priv_sg_virginia_id" {
+  description = "ID Public Security Group Virginia"
+  type = string
+}

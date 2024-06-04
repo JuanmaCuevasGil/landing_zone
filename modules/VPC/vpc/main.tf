@@ -2,7 +2,7 @@
 resource "aws_vpc" "vpc_virginia" {
   cidr_block = var.cidr_map["virginia"]
   tags = {
-    "Name" = "vpc-${var.suffix}"
+    "Name" = "VPC-Virginia"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_subnet" "public" {
   cidr_block              = var.cidr_map["public"]
   map_public_ip_on_launch = true
   tags = {
-    "Name" = "public_subnet-${var.suffix}"
+    "Name" = "PubSub-Virginia"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_subnet" "private" {
   vpc_id     = aws_vpc.vpc_virginia.id
   cidr_block = var.cidr_map["private"]
   tags = {
-    "Name" = "private_subnet-${var.suffix}"
+    "Name" = "PrivSub-Virginia"
   }
   depends_on = [aws_subnet.public]
 }
@@ -30,7 +30,7 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "ig_virginia" {
   vpc_id = aws_vpc.vpc_virginia.id
   tags = {
-    "Name" = "igw-${var.suffix}"
+    "Name" = "IG-Virginia"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc_virginia.id
 
   tags = {
-    "Name" = "private_rt-${var.suffix}"
+    "Name" = "Priv-RT-Virginia"
   }
 }
 
@@ -71,7 +71,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    "Name" = "public_rt-${var.suffix}"
+    "Name" = "Pub-RT-Virginia"
   }
 }
 
@@ -84,64 +84,6 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private.id
-}
-
-# Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "public_instance" {
-  name        = "Public Instance SG"
-  description = "Allow SSH, IMCP, HTTP, HTTPS inbound traffic and ALL egress traffic"
-  vpc_id      = aws_vpc.vpc_virginia.id
-
-  dynamic "ingress" {
-    # Remove cases any and default from our list because they deny or allow all traffic and we need to specify
-    for_each = {
-      for key, value in var.ports : key => value
-      if key != "any" && key != "default"
-    }
-    content {
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = [var.cidr_map["any"]]
-    }
-  }
-
-  egress {
-    from_port   = var.ports["default"].port
-    to_port     = var.ports["default"].port
-    protocol    = var.ports["default"].protocol
-    cidr_blocks = [var.cidr_map["any"]]
-  }
-
-  tags = {
-    "Name" = "public_instance_sg-${var.suffix}"
-  }
-}
-
-# Creates a security group for a specific VPC, allowing SSH access from any IP. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "private_instance" {
-  name        = "Private Instance SG"
-  description = "Allow SSH inbound traffic and ALL egress traffic"
-  vpc_id      = aws_vpc.vpc_virginia.id
-
-  ingress {
-    from_port   = var.ports["ssh"].port
-    to_port     = var.ports["ssh"].port
-    protocol    = var.ports["ssh"].protocol
-    cidr_blocks = [var.private_ip]
-    # security_groups = [ aws_security_group.public_instance.id ]
-  }
-
-  egress {
-    from_port   = var.ports["default"].port
-    to_port     = var.ports["default"].port
-    protocol    = var.ports["default"].protocol
-    cidr_blocks = [var.cidr_map["any"]]
-  }
-
-  tags = {
-    "Name" = "private_instance_sg-${var.suffix}"
-  }
 }
 
 resource "aws_customer_gateway" "vpn" {
@@ -172,7 +114,7 @@ resource "aws_instance" "vpn" {
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.public_vpn.id
   key_name                    = "SSH-Virginia-Public"
-  vpc_security_group_ids      = [aws_security_group.virginia_vpn.id]
+  vpc_security_group_ids      = [var.sg_vpn_id]
   associate_public_ip_address = true
 }
 
@@ -186,44 +128,17 @@ resource "aws_subnet" "public_vpn" {
   cidr_block              = "10.20.0.0/24"
 }
 
-resource "aws_security_group" "virginia_vpn" {
-  name = "allow-all"
-
-  vpc_id = aws_vpc.virginia_vpn.id
-
-  ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_internet_gateway" "ig_virginia_2" {
   vpc_id = aws_vpc.virginia_vpn.id
   tags = {
-    "Name" = "igw-${var.suffix}"
+    "Name" = "IG-VPN"
   }
 }
 resource "aws_route_table" "public_vpn" {
   vpc_id = aws_vpc.virginia_vpn.id
 
   tags = {
-    "Name" = "private_rt-${var.suffix}"
+    "Name" = "Priv-RT-VPN"
   }
 }
 resource "aws_route" "vpn_route" {
