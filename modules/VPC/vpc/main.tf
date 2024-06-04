@@ -67,8 +67,13 @@ resource "aws_nat_gateway" "nat_gateway" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.virginia.id
 
+  route {
+    cidr_block = var.cidr_map["any"]
+    gateway_id = aws_internet_gateway.ig["virginia"].id
+  }
+
   tags = {
-    "Name" = "Priv-RT-Virginia"
+    "Name" = "Pub-RT-Virginia"
   }
 }
 
@@ -82,22 +87,28 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    "Name" = "Pub-RT-Virginia"
+    "Name" = "Pri-RT-Virginia"
   }
 }
 
 resource "aws_route_table" "vpn" {
   vpc_id = aws_vpc.vpn.id
+
+  route {
+    cidr_block = var.cidr_map["any"]
+    gateway_id = aws_internet_gateway.ig["vpn"].id
+  }
+
   tags = {
     "Name" = "Priv-RT-VPN"
   }
 }
 
 resource "aws_route_table_association" "routes_assoc" {
-  for_each       = {
-    public = aws_route_table.public
+  for_each = {
+    public  = aws_route_table.public
     private = aws_route_table.private
-    vpn = aws_route_table.vpn
+    vpn     = aws_route_table.vpn
   }
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
