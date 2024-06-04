@@ -1,11 +1,7 @@
-output "sg_vpn_id" {
-  value = aws_security_group.virginia_vpn.id
-}
-
-output "pub_sg_virginia_id" {
-  value = aws_security_group.public_instance.id
-}
-
-output "priv_sg_virginia_id" {
-  value = aws_security_group.private_instance.id
+output "sg_ids" {
+  value = {
+    public  = aws_security_group.public.id
+    private = aws_security_group.private.id
+    vpn     = aws_security_group.vpn.id
+  }
 }

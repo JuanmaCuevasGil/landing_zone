@@ -18,5 +18,5 @@ output "key_pairs" {
 }
 
 output "name" {
-  value = module.myinstances.public_instance_arns
+  value = module.myinstances.instance_arns
 }

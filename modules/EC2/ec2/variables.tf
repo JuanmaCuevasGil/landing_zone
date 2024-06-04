@@ -1,39 +1,20 @@
-variable "instance_name" {
-  description = "Names for the public instances"
-  type        = set(string)
-}
-
 variable "ec2_specs" {
-  description = "EC2 specifications including AMI and instance type"
-  type = object({
-    ami           = string
-    instance_type = string
-  })
+  description = "Parameters of the instance"
+  type        = object({
+    ami = string
+    type = string
+    instances = map(string)
+  })  
 }
 
-variable "public_subnet_id" {
+variable "subnet_ids" {
   description = "Public subnet ID where instances will be launched"
-  type        = string
+  type        = map(string)
 }
 
-variable "private_subnet_id" {
-  description = "Private subnet ID where instances will be launched"
-  type        = string
-}
-
-variable "public_sg_id" {
+variable "sg_ids" {
   description = "Security group ID to associate with public instances"
-  type        = string
-}
-
-variable "private_sg_id" {
-  description = "Security group ID to associate with private instances"
-  type        = string
-}
-
-variable "enable_monitoring" {
-  description = "Enable or disable monitoring instance"
-  type        = bool
+  type        = map(string)
 }
 
 variable "suffix" {

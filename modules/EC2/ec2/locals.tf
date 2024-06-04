@@ -46,5 +46,15 @@ locals {
   firewall-cmd --zone=public --add-service=ssh --permanent
   firewall-cmd --reload
   EOF
+    vpn = <<-EOF
+    EOF
+  }
+}
+
+locals {
+  filtered_ec2_specs = {
+    for key, value in var.ec2_specs["instances"] :
+    key => value
+    if value != "vpn"
   }
 }

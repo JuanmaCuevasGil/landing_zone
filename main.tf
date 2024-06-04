@@ -8,32 +8,29 @@ module "zero_spend_budget" {
 ###############---- MODULE EC2 ----###############
 # Creation of a number of instances defined in tfvars based on the quantity of names entered
 module "myinstances" {
-  source = "./modules/EC2/ec2"
-  instance_name     = var.instance_name
-  ec2_specs         = var.ec2_specs
-  public_subnet_id  = module.network.public_subnet_id
-  private_subnet_id = module.network.private_subnet_id
-  keys              = var.keys
-  public_sg_id      = module.security_groups.pub_sg_virginia_id
-  private_sg_id     = module.security_groups.priv_sg_virginia_id
-  enable_monitoring = var.enable_monitoring
-  suffix            = local.suffix
-  key_pair_pem      = module.key_pair.key_pair_pem
-  depends_on        = [module.key_pair, module.security_groups]
+  source       = "./modules/EC2/ec2"
+  ec2_specs    = var.ec2_specs
+  subnet_ids   = module.network.subnet_ids
+  keys         = var.keys
+  sg_ids       = module.security_groups.sg_ids
+  suffix       = local.suffix
+  key_pair_pem = module.key_pair.key_pair_pem
+  depends_on   = [module.key_pair, module.security_groups]
 }
+
 # Module to generate key pair for access to the private instance
 module "key_pair" {
   source = "./modules/EC2/key_pair"
   keys   = var.keys
 }
+
 # Module to create security groups
 module "security_groups" {
-  source = "./modules/EC2/security_groups"
+  source     = "./modules/EC2/security_groups"
   ports      = var.ports
-  vpc_virginia_id = module.network.vpc_id
-  vpn_id = module.network.vpn_id
+  vpc_ids    = module.network.vpc_ids
   cidr_map   = var.cidr_map
-  private_ip = "0.0.0.0/0"
+  private_ip = "0.0.0.0/0" #"${module.myinstances.private_ip["jumpserver"]}/32"
 }
 
 ###############----MODULE IAM ----###############
@@ -41,8 +38,8 @@ module "security_groups" {
 module "iam_groups" {
   source     = "./modules/IAM/iam_groups"
   iam_groups = var.iam_groups
-  depends_on = [ module.iam_users ]
 }
+
 # Module for managing IAM users.
 module "iam_users" {
   source     = "./modules/IAM/iam_users"
@@ -54,7 +51,8 @@ module "policy" {
   source         = "./modules/IAM/policy"
   s3_bucket_arn  = module.mybucket.s3_bucket_arn
   iam_group      = var.iam_groups
-  jumpserver_arn = module.myinstances.public_instance_arns["jumpserver"]
+  jumpserver_arn = module.myinstances.instance_arns["jumpserver"]
+  depends_on = [ module.iam_groups ]
 }
 
 ###############---- MODULE S3 ----###############
@@ -62,7 +60,7 @@ module "policy" {
 module "mybucket" {
   source       = "./modules/S3"
   bucket_name  = local.s3-sufix
-  instance_arn = module.myinstances.monitoring_instance_arn
+  instance_arn = module.myinstances.instance_arns["monitoring"]
   config_time  = var.bucket_config
 }
 
@@ -71,19 +69,16 @@ module "mybucket" {
 # suffix as a suffix, ingress_port_list for the list of incoming ports, and maps of
 # protocols and ports with specific values for TCP and ports.
 module "network" {
-  source     = "./modules/VPC/vpc"
-  cidr_map   = var.cidr_map
-  suffix     = local.suffix
-  ports      = var.ports
-  private_ip = "${module.myinstances.private_ip["jumpserver"]}/32"
-  sg_vpn_id = module.security_groups.sg_vpn_id
-  pub_sg_virginia_id = module.security_groups.pub_sg_virginia_id
-  priv_sg_virginia_id = module.security_groups.priv_sg_virginia_id
+  source              = "./modules/VPC/vpc"
+  cidr_map            = var.cidr_map
+  suffix              = local.suffix
+  ports               = var.ports
 }
+
 # Module to store vpc logs in an S3 bucket
 module "vpc_flow_logs" {
   source        = "./modules/VPC/vpc_flow_logs"
   s3_bucket_arn = module.mybucket.s3_bucket_arn
-  vpc_id        = module.network.vpc_id
-  depends_on = [ module.mybucket ]
+  vpc_id        = module.network.vpc_ids["virginia"]
+  depends_on    = [module.mybucket]
 }

@@ -1,14 +1,19 @@
 # Creation of the VPC in the specified region with randomly generated suffix
-resource "aws_vpc" "vpc_virginia" {
+resource "aws_vpc" "virginia" {
   cidr_block = var.cidr_map["virginia"]
   tags = {
     "Name" = "VPC-Virginia"
   }
 }
 
+# Creation of the VPC in the specified region with randomly generated suffix for the VPN
+resource "aws_vpc" "vpn" {
+  cidr_block = var.cidr_map["vpn"]
+}
+
 # Creation of the public network in the specified VPC with randomly generated suffix, instances launched here will receive a public IP
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.vpc_virginia.id
+  vpc_id                  = aws_vpc.virginia.id
   cidr_block              = var.cidr_map["public"]
   map_public_ip_on_launch = true
   tags = {
@@ -18,19 +23,32 @@ resource "aws_subnet" "public" {
 
 # Creation of the private network in the specified VPC with randomly generated suffix, launched after the creation of the public subnet
 resource "aws_subnet" "private" {
-  vpc_id     = aws_vpc.vpc_virginia.id
+  vpc_id     = aws_vpc.virginia.id
   cidr_block = var.cidr_map["private"]
   tags = {
     "Name" = "PrivSub-Virginia"
   }
-  depends_on = [aws_subnet.public]
+}
+
+# Creation of a public network in the specified VPC with randomly generated suffix
+resource "aws_subnet" "vpn" {
+  vpc_id                  = aws_vpc.vpn.id
+  map_public_ip_on_launch = true
+  cidr_block              = var.cidr_map["vpn_subnet"]
+  tags = {
+    "Name" = "VPNSub-Virginia"
+  }
 }
 
 # Creation of the Internet Gateway in the specified VPC with randomly generated suffix
-resource "aws_internet_gateway" "ig_virginia" {
-  vpc_id = aws_vpc.vpc_virginia.id
+resource "aws_internet_gateway" "ig" {
+  for_each = {
+    virginia = aws_vpc.virginia
+    vpn      = aws_vpc.vpn
+  }
+  vpc_id = each.value.id
   tags = {
-    "Name" = "IG-Virginia"
+    "Name" = "IG-${each.key}"
   }
 }
 
@@ -47,24 +65,17 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 # Creation of a public route table in a specific VPC. The route table includes a route that sends all traffic through an Internet Gateway (IGW).
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.vpc_virginia.id
+  vpc_id = aws_vpc.virginia.id
 
   tags = {
     "Name" = "Priv-RT-Virginia"
   }
 }
 
-resource "aws_route" "public_route" {
-  route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.ig_virginia.id
-  depends_on             = [aws_vpc.virginia_vpn]
-}
-
 # Creation of a private route table in a specific VPC. The route table includes a route that sends SSH traffic through an NAT Gateway.
 resource "aws_route_table" "private" {
-  vpc_id     = aws_vpc.vpc_virginia.id
-  depends_on = [aws_nat_gateway.nat_gateway]
+  vpc_id = aws_vpc.virginia.id
+
   route {
     cidr_block     = var.cidr_map["any"]
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
@@ -75,7 +86,19 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "public" {
+resource "aws_route_table" "vpn" {
+  vpc_id = aws_vpc.vpn.id
+  tags = {
+    "Name" = "Priv-RT-VPN"
+  }
+}
+
+resource "aws_route_table_association" "routes_assoc" {
+  for_each       = {
+    public = aws_route_table.public
+    private = aws_route_table.private
+    vpn = aws_route_table.vpn
+  }
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
@@ -86,74 +109,42 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_customer_gateway" "vpn" {
-  bgp_asn    = 65000
-  ip_address = aws_instance.vpn.public_ip
-  type       = "ipsec.1"
+resource "aws_route_table_association" "vpn" {
+  subnet_id      = aws_subnet.vpn.id
+  route_table_id = aws_route_table.vpn.id
 }
 
-resource "aws_vpn_gateway" "vpn" {
-  vpc_id = aws_vpc.vpc_virginia.id
-}
+# resource "aws_customer_gateway" "vpn" {
+#   bgp_asn    = 65000
+#   ip_address = aws_instance.vpn.public_ip
+#   type       = "ipsec.1"
+# }
 
-resource "aws_vpn_connection" "vpn" {
-  customer_gateway_id = aws_customer_gateway.vpn.id
-  vpn_gateway_id      = aws_vpn_gateway.vpn.id
-  type                = "ipsec.1"
+# resource "aws_vpn_gateway" "vpn" {
+#   vpc_id = aws_vpc.vpc_virginia.id
+# }
 
-  static_routes_only = true
-}
+# resource "aws_vpn_connection" "vpn" {
+#   customer_gateway_id = aws_customer_gateway.vpn.id
+#   vpn_gateway_id      = aws_vpn_gateway.vpn.id
+#   type                = "ipsec.1"
 
-resource "aws_vpn_connection_route" "vpn" {
-  vpn_connection_id      = aws_vpn_connection.vpn.id
-  destination_cidr_block = "10.10.0.0/24"
-}
+#   static_routes_only = true
+# }
 
-resource "aws_instance" "vpn" {
-  ami                         = "ami-0e001c9271cf7f3b9"
-  instance_type               = "t2.micro"
-  subnet_id                   = aws_subnet.public_vpn.id
-  key_name                    = "SSH-Virginia-Public"
-  vpc_security_group_ids      = [var.sg_vpn_id]
-  associate_public_ip_address = true
-}
+# resource "aws_vpn_connection_route" "vpn" {
+#   vpn_connection_id      = aws_vpn_connection.vpn.id
+#   destination_cidr_block = "10.10.0.0/24"
+# }
 
-resource "aws_vpc" "virginia_vpn" {
-  cidr_block = "10.20.0.0/16"
-}
+# resource "aws_route" "vpn_route" {
+#   route_table_id         = aws_route_table.public_vpn.id
+#   destination_cidr_block = "0.0.0.0/0"
+#   gateway_id             = aws_internet_gateway.ig_virginia_2.id
+#   depends_on             = [aws_vpc.virginia_vpn]
+# }
 
-resource "aws_subnet" "public_vpn" {
-  vpc_id                  = aws_vpc.virginia_vpn.id
-  map_public_ip_on_launch = true
-  cidr_block              = "10.20.0.0/24"
-}
-
-resource "aws_internet_gateway" "ig_virginia_2" {
-  vpc_id = aws_vpc.virginia_vpn.id
-  tags = {
-    "Name" = "IG-VPN"
-  }
-}
-resource "aws_route_table" "public_vpn" {
-  vpc_id = aws_vpc.virginia_vpn.id
-
-  tags = {
-    "Name" = "Priv-RT-VPN"
-  }
-}
-resource "aws_route" "vpn_route" {
-  route_table_id         = aws_route_table.public_vpn.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.ig_virginia_2.id
-  depends_on             = [aws_vpc.virginia_vpn]
-}
-
-resource "aws_vpn_gateway_route_propagation" "main" {
-  vpn_gateway_id = aws_vpn_gateway.vpn.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "vpn_association" {
-  subnet_id = aws_subnet.public_vpn.id
-  route_table_id = aws_route_table.public_vpn.id
-}
+# resource "aws_vpn_gateway_route_propagation" "main" {
+#   vpn_gateway_id = aws_vpn_gateway.vpn.id
+#   route_table_id = aws_route_table.public.id
+# }

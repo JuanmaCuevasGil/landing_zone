@@ -23,17 +23,11 @@ variable "tags" {
 
 variable "ec2_specs" {
   description = "Parameters of the instance"
-  type        = map(string)
-}
-
-variable "instance_name" {
-  description = "Name of the instances"
-  type        = set(string)
-}
-
-variable "enable_monitoring" {
-  description = "Enables the deployment of monitoring"
-  type        = bool
+  type        = object({
+    ami = string
+    type = string
+    instances = map(string)
+  })  
 }
 
 variable "iam_users" {

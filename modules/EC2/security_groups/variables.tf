@@ -11,14 +11,9 @@ variable "ports" {
   }))
 }
 
-variable "vpc_virginia_id" {
+variable "vpc_ids" {
   description = "ID VPC Virginia"
-  type = string
-}
-
-variable "vpn_id" {
-  description = "ID VPC Virginia"
-  type = string
+  type = map(string)
 }
 
 variable "private_ip" {

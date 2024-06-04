@@ -3,12 +3,15 @@ region = {
 }
 
 cidr_map = {
-  any      = "0.0.0.0/0"
-  virginia = "10.10.0.0/16"
-  public   = "10.10.0.0/24"
-  private  = "10.10.1.0/24"
+  any        = "0.0.0.0/0"
+  virginia   = "10.10.0.0/16"
+  vpn        = "10.20.0.0/16"
+  public     = "10.10.1.0/24"
+  private    = "10.10.2.0/24"
+  vpn_subnet = "10.20.1.0/24"
 }
 
+#Cambiar los puertos para añadir 3 variables
 ports = {
   any     = { port = -1, protocol = "all" }
   default = { port = 0, protocol = "-1" }
@@ -28,18 +31,19 @@ tags = {
   "region"      = "virginia"
 }
 
+
+
 ec2_specs = {
-  "ami"           = "ami-0e001c9271cf7f3b9"
-  "instance_type" = "t2.micro"
+  ami  = "ami-0e001c9271cf7f3b9"
+  type = "t2.micro"
+  instances = {
+    apache     = "public"
+    mysql      = "public"
+    jumpserver = "public"
+    monitoring = "private"
+    vpn        = "vpn"
+  }
 }
-
-instance_name = [
-  "apache",
-  "mysql",
-  "jumpserver"
-]
-
-enable_monitoring = true
 
 iam_users = {
   "admin_user"      = ["aws_admin"]
@@ -61,6 +65,7 @@ keys = {
   key_name = {
     public  = "SSH-Virginia-Public"
     private = "SSH-Virginia-Private"
+    vpn     = "SSH-Virginia-VPN"
   }
 }
 

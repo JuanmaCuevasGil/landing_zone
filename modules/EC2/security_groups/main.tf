@@ -1,8 +1,8 @@
 # Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "public_instance" {
+resource "aws_security_group" "public" {
   name        = "Public Instance SG"
   description = "Allow SSH, IMCP, HTTP, HTTPS inbound traffic and ALL egress traffic"
-  vpc_id      = var.vpc_virginia_id
+  vpc_id      = var.vpc_ids["virginia"]
 
   dynamic "ingress" {
     # Remove cases any and default from our list because they deny or allow all traffic and we need to specify
@@ -30,10 +30,10 @@ resource "aws_security_group" "public_instance" {
 }
 
 # Creates a security group for a specific VPC, allowing SSH access from any IP. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "private_instance" {
+resource "aws_security_group" "private" {
   name        = "Private Instance SG"
   description = "Allow SSH inbound traffic and ALL egress traffic"
-  vpc_id      = var.vpc_virginia_id
+  vpc_id      = var.vpc_ids["virginia"]
 
   ingress {
     from_port   = var.ports["ssh"].port
@@ -53,9 +53,9 @@ resource "aws_security_group" "private_instance" {
   }
 }
 
-resource "aws_security_group" "virginia_vpn" {
+resource "aws_security_group" "vpn" {
   name = "allow-all"
-  vpc_id = var.vpn_id
+  vpc_id = var.vpc_ids["vpn"]
 
   ingress {
     from_port   = 0
