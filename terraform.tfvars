@@ -13,12 +13,68 @@ cidr_map = {
 
 #Cambiar los puertos para añadir 3 variables
 ports = {
-  any     = { port = -1, protocol = "all" }
-  default = { port = 0, protocol = "-1" }
-  ssh     = { port = 22, protocol = "tcp" }
-  http    = { port = 80, protocol = "tcp" }
-  https   = { port = 443, protocol = "tcp" }
-  icmp    = { port = -1, protocol = "icmp" }
+  public = {
+    ingress = {
+      icmp = {        
+        from_port = -1
+        to_port   = -1
+        protocol  = "icmp"
+      }
+      ssh = {
+        from_port = 22
+        to_port   = 22
+        protocol  = "tcp"
+      }
+      http = {
+        from_port = 80
+        to_port   = 80
+        protocol  = "tcp"
+      }
+      https = {
+        from_port = 443
+        to_port   = 443
+        protocol  = "tcp"
+      }
+    }
+    egress = {
+      from_port = 0
+      to_port   = 0
+      protocol  = "-1"
+    }
+  }
+  private = {
+    ingress = {
+      ssh = {
+        from_port = 22,
+        to_port   = 22,
+        protocol  = "tcp"
+      }
+    }
+    egress = {
+      from_port = 0,
+      to_port   = 0,
+      protocol  = "-1"
+    }
+  }
+  vpn = {
+    ingress = {
+      all = {
+        from_port = 0,
+        to_port   = 65535,
+        protocol  = "tcp"
+      },
+      icmp = {
+        from_port = -1,
+        to_port   = -1,
+        protocol  = "icmp"
+      }
+    }
+    egress = {
+      from_port = 0,
+      to_port   = 0,
+      protocol  = "-1"
+    }
+  }
 }
 
 tags = {

@@ -10,8 +10,16 @@ variable "cidr_map" {
 
 variable "ports" {
   type = map(object({
-    port     = number
-    protocol = string
+    ingress = map(object({
+      from_port = number
+      to_port   = number
+      protocol  = string
+    }))
+    egress = object({
+      from_port = number
+      to_port   = number
+      protocol  = string
+    })
   }))
   description = "Ports & Protocols"
 }
@@ -23,11 +31,11 @@ variable "tags" {
 
 variable "ec2_specs" {
   description = "Parameters of the instance"
-  type        = object({
-    ami = string
-    type = string
+  type = object({
+    ami       = string
+    type      = string
     instances = map(string)
-  })  
+  })
 }
 
 variable "iam_users" {

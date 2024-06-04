@@ -12,7 +12,7 @@ resource "aws_instance" "instance" {
   user_data              = local.scripts[each.key]
   depends_on             = [aws_instance.vpn]
   tags = {
-    "Name" = "${each.key}-${var.suffix}"
+    "Name" = "${each.key}"
   }
 }
 
@@ -24,6 +24,6 @@ resource "aws_instance" "vpn" {
   vpc_security_group_ids = [var.sg_ids["vpn"]]
   user_data              = local.scripts["vpn"]
   tags = {
-    "Name" = "${"vpn"}-${var.suffix}"
+    "Name" = "${"vpn"}"
   }
 }

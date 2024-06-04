@@ -13,7 +13,6 @@ module "myinstances" {
   subnet_ids   = module.network.subnet_ids
   keys         = var.keys
   sg_ids       = module.security_groups.sg_ids
-  suffix       = local.suffix
   key_pair_pem = module.key_pair.key_pair_pem
   depends_on   = [module.key_pair, module.security_groups]
 }
@@ -45,6 +44,7 @@ module "iam_users" {
   source     = "./modules/IAM/iam_users"
   iam_users  = var.iam_users
   iam_groups = var.iam_groups
+
 }
 # Module for group policy
 module "policy" {
@@ -71,8 +71,6 @@ module "mybucket" {
 module "network" {
   source              = "./modules/VPC/vpc"
   cidr_map            = var.cidr_map
-  suffix              = local.suffix
-  ports               = var.ports
 }
 
 # Module to store vpc logs in an S3 bucket
