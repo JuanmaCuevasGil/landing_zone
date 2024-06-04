@@ -12,7 +12,7 @@ resource "aws_instance" "instance" {
   user_data              = local.scripts[each.key]
   depends_on             = [aws_instance.vpn]
   tags = {
-    "Name" = "${each.value}-${var.suffix}"
+    "Name" = "${each.key}-${var.suffix}"
   }
 }
 
