@@ -12,16 +12,6 @@ locals {
   firewall-cmd --zone=public --add-service=https --permanent
   firewall-cmd --reload
   EOF
-    monitoring = <<-EOF
-  #!/bin/bash
-  sudo su -
-  apt update -y
-  apt install awscli -y
-  apt install firewalld -y
-  firewall-cmd --zone=private --change-interface=eth0 --permanent
-  firewall-cmd --zone=public --add-service=ssh --permanent
-  firewall-cmd --reloads
-  EOF
     mysql      = <<-EOF
   #!/bin/bash
   sudo su -
@@ -34,20 +24,36 @@ locals {
   firewall-cmd --zone=public --add-port=3306/tcp --permanent
   firewall-cmd --reload
   EOF
+    monitoring = <<-EOF
+  #!/bin/bash
+  sudo su -
+  apt update -y
+  apt install awscli -y
+  apt install firewalld -y
+  firewall-cmd --zone=private --change-interface=eth0 --permanent
+  firewall-cmd --zone=public --add-service=ssh --permanent
+  firewall-cmd --reloads
+  EOF
     jumpserver = <<-EOF
   #!/bin/bash
   sudo su -
   mkdir /.ssh
   echo "${var.key_pair_pem["private"].private_key_pem}" > /.ssh/${var.keys.key_name["private"]}.pem
   chmod 400 ~/${var.keys.key_name["private"]}.pem
+  echo "${var.key_pair_pem["vpn"].private_key_pem}" > /.ssh/${var.keys.key_name["vpn"]}.pem
+  chmod 400 ~/${var.keys.key_name["private"]}.pem
   apt update -y
   apt install firewalld -y
+  apt install openvpn -y
   firewall-cmd --zone=public --change-interface=eth0 --permanent
   firewall-cmd --zone=public --add-service=ssh --permanent
+  firewall-cmd --zone=public --add-service=openvpn --permanent
   firewall-cmd --reload
+  scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/ -y
+  openvpn --config /home/ubuntu/jumpserver.ovpn
   EOF
-    vpn = <<-EOF
-    EOF
+   vpn = <<-EOF
+  EOF
   }
 }
 

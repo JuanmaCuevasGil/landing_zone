@@ -15,7 +15,18 @@ module "myinstances" {
   sg_ids       = module.security_groups.sg_ids
   suffix       = local.suffix
   key_pair_pem = module.key_pair.key_pair_pem
-  depends_on   = [module.key_pair, module.security_groups]
+  depends_on   = [module.key_pair, module.security_groups, module.vpn]
+  vpn_ip = module.vpn.vpn_ip
+}
+
+module "vpn" {
+  source = "./modules/EC2/ec2/vpn"
+  ec2_specs    = var.ec2_specs
+  subnet_ids   = module.network.subnet_ids
+  keys         = var.keys
+  sg_ids       = module.security_groups.sg_ids
+  suffix       = local.suffix
+  key_pair_pem = module.key_pair.key_pair_pem
 }
 
 # Module to generate key pair for access to the private instance
