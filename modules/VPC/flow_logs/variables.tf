@@ -5,5 +5,5 @@ variable "s3_bucket_arn" {
 
 variable "vpc_id" {
   description = "VPC id"
-  type = string
+  type = map(string)
 }
