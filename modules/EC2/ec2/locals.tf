@@ -39,17 +39,17 @@ locals {
   sudo su -
   mkdir /.ssh
   echo "${var.key_pair_pem["private"].private_key_pem}" > /.ssh/${var.keys.key_name["private"]}.pem
-  chmod 400 ~/${var.keys.key_name["private"]}.pem
+  chmod 400 /.ssh/${var.keys.key_name["private"]}.pem
   echo "${var.key_pair_pem["vpn"].private_key_pem}" > /.ssh/${var.keys.key_name["vpn"]}.pem
-  chmod 400 ~/${var.keys.key_name["private"]}.pem
+  chmod 400 /.ssh/${var.keys.key_name["vpn"]}.pem
   apt update -y
-  apt install firewalld -y
+  #apt install firewalld -y
   apt install openvpn -y
-  firewall-cmd --zone=public --change-interface=eth0 --permanent
-  firewall-cmd --zone=public --add-service=ssh --permanent
-  firewall-cmd --zone=public --add-service=openvpn --permanent
-  firewall-cmd --reload
-  scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/ -y
+  #firewall-cmd --zone=public --change-interface=eth0 --permanent
+  #firewall-cmd --zone=public --add-service=ssh --permanent
+  #firewall-cmd --zone=public --add-service=openvpn --permanent
+  #firewall-cmd --reload
+  y | scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/
   openvpn --config /home/ubuntu/jumpserver.ovpn
   EOF
    vpn = <<-EOF

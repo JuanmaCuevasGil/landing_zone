@@ -11,6 +11,6 @@ resource "aws_instance" "instance" {
   vpc_security_group_ids = [var.sg_ids[each.value]]
   user_data              = local.scripts[each.key]
   tags = {
-    "Name" = "${each.value}-${var.suffix}"
+    "Name" = "${each.key}-${var.suffix}"
   }
 }

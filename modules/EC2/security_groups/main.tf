@@ -57,16 +57,16 @@ resource "aws_security_group" "vpn" {
   name = "allow-all"
   vpc_id = var.vpc_ids["vpn"]
 
-  ingress {
+  /* ingress {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
+  } */
   ingress {
     from_port   = -1
     to_port     = -1
-    protocol    = "icmp"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
