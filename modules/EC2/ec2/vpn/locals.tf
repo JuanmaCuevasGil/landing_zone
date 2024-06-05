@@ -14,6 +14,7 @@ locals {
   mkdir /.ssh
   echo "${var.key_pair_pem["public"].private_key_pem}" > /.ssh/${var.keys.key_name["public"]}.pem
   chmod 400 /.ssh/${var.keys.key_name["public"]}.pem
+  chown -R ubuntu /.ssh
   curl -O https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
   chmod +x openvpn-install.sh
   export ENDPOINT=$(curl http://checkip.amazonaws.com)
