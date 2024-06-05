@@ -2,7 +2,7 @@
 # Creation of public instances given the length of the list, of the type of the specified AMI 
 # with our own assigned key for SSH access. These belong to the public network and share the same 
 # bootstrap script.
-resource "aws_instance" "instance" {
+resource "aws_instance" "instances" {
   for_each               = local.filtered_ec2_specs
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.type
