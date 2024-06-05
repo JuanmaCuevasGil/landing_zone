@@ -42,13 +42,15 @@ locals {
   chmod 400 /.ssh/${var.keys.key_name["private"]}.pem
   echo "${var.key_pair_pem["vpn"].private_key_pem}" > /.ssh/${var.keys.key_name["vpn"]}.pem
   chmod 400 /.ssh/${var.keys.key_name["vpn"]}.pem
+  chown -R ubuntu /.ssh
+  ssh-keyscan -H ${var.vpn_ip} | sudo tee -a ~/.ssh/known_hosts
   apt update -y
-  #apt install firewalld -y
+  apt install firewalld -y
   apt install openvpn -y
-  #firewall-cmd --zone=public --change-interface=eth0 --permanent
-  #firewall-cmd --zone=public --add-service=ssh --permanent
-  #firewall-cmd --zone=public --add-service=openvpn --permanent
-  #firewall-cmd --reload
+  firewall-cmd --zone=public --change-interface=eth0 --permanent
+  firewall-cmd --zone=public --add-service=ssh --permanent
+  firewall-cmd --zone=public --add-service=openvpn --permanent
+  firewall-cmd --reload
   scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/
   openvpn --config /home/ubuntu/jumpserver.ovpn
   EOF

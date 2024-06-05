@@ -1,3 +1,4 @@
+# Outputs to display certain data when executing apply
 output "s3_arn" {
   value = module.mybucket.s3_bucket_arn
 }

@@ -16,5 +16,5 @@ resource "aws_key_pair" "key_pair" {
 resource "local_file" "publickey" {
   for_each = var.keys.key_name
   content  = tls_private_key.tls_key_pair[each.key].private_key_pem
-  filename = "./pem/${each.value}.pem"
+  filename = "./keys/${each.value}.pem"
 }

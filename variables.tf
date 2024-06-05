@@ -1,5 +1,5 @@
 variable "region" {
-  description = "Región"
+  description = "Region"
   type        = map(string)
 }
 
@@ -25,12 +25,12 @@ variable "ports" {
 }
 
 variable "tags" {
-  description = "value"
+  description = "Generally tags"
   type        = map(string)
 }
 
 variable "ec2_specs" {
-  description = "Parameters of the instance"
+  description = "Parameters of the instances"
   type = object({
     ami       = string
     type      = string
@@ -39,12 +39,12 @@ variable "ec2_specs" {
 }
 
 variable "iam_users" {
-  description = "Usuarios IAM"
+  description = "Users map and their assignments"
   type        = map(set(string))
 }
 
 variable "iam_groups" {
-  description = "Mapa de los grupos"
+  description = "Groups map"
   type        = list(string)
 }
 

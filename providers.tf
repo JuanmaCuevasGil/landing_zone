@@ -1,10 +1,12 @@
 terraform {
 
   required_providers {
+    # Cloud resource version
     aws = {
       source  = "hashicorp/aws"
       version = ">=4.36.0"
     }
+    # Resource to generate random suffix
     random = {
       source  = "hashicorp/random"
       version = "3.6.1"
