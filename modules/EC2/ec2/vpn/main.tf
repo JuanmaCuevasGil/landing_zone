@@ -1,3 +1,4 @@
+# Creation of the specific vpn out from the loop because of the needs to exist to launch the other instances user datas
 resource "aws_instance" "vpn" {
   ami                    = var.ec2_specs.ami
   instance_type          = var.ec2_specs.type

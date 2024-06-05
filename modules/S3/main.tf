@@ -12,6 +12,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 }
 
+# Configuration of the s3 bucket lifecycle with time variations in tfstate
 resource "aws_s3_bucket_lifecycle_configuration" "bucket-config" {
   bucket = aws_s3_bucket.dc_bucket.id
 

@@ -1,5 +1,5 @@
 variable "iam_groups" {
-  description = "Grupos IAM"
+  description = "IAM Groups"
   type = list(string)
 }
 

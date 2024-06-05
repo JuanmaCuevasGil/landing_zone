@@ -1,4 +1,6 @@
-# Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
+# Creates a security group dinamically for a specific VPC, allowing ports access 
+# from any specified IP range and permitting all outbound traffic. It depends of 
+# the ports variable from terraform.tfvars
 resource "aws_security_group" "sg" {
   for_each = var.ports
   name     = each.key
