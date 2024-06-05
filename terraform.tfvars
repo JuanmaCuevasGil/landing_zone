@@ -122,7 +122,6 @@ iam_users = {
   "billing_user"     = ["aws_billing"]
   "security_user"    = ["aws_security"]
   "operations_user"  = ["aws_operations"]
-  "operations_user2" = ["aws_operations"]
 }
 
 # List of Groups added to our configuration
@@ -186,6 +185,21 @@ budgets = [
         threshold                         = 50
         threshold_type                    = "PERCENTAGE"
         budget_subscriber_email_addresses = ["another@yopmail.com"]
+      }
+    ]
+  },
+  {
+    budget_name              = "TheRule"
+    budget_limit_amount      = "1000.00"
+    budget_time_period_start = "2023-01-01_00:00"
+    budget_time_period_end   = "2087-01-01_00:00"
+    budget_notifications = [
+      {
+        comparison_operator               = "GREATER_THAN"
+        notification_type                 = "ACTUAL"
+        threshold                         = 80
+        threshold_type                    = "PERCENTAGE"
+        budget_subscriber_email_addresses = ["anormadi@yopmail.com"]
       }
     ]
   }
