@@ -39,10 +39,10 @@ ports = {
         protocol  = "tcp"
       }
       openvpn = {
-      from_port = 1194
-      to_port   = 1194
-      protocol  = "udp"
-    }
+        from_port = 1194
+        to_port   = 1194
+        protocol  = "udp"
+      }
     }
     egress = {
       from_port = 0
@@ -77,10 +77,10 @@ ports = {
         protocol  = "icmp"
       }
       openvpn = {
-      from_port = 1194
-      to_port   = 1194
-      protocol  = "udp"
-    }
+        from_port = 1194
+        to_port   = 1194
+        protocol  = "udp"
+      }
     }
     egress = {
       from_port = 0,
@@ -118,10 +118,11 @@ ec2_specs = {
 
 # Users membership associations to groups
 iam_users = {
-  "admin_user"      = ["aws_admin"]
-  "billing_user"    = ["aws_billing"]
-  "security_user"   = ["aws_security"]
-  "operations_user" = ["aws_operations"]
+  "admin_user"       = ["aws_admin"]
+  "billing_user"     = ["aws_billing"]
+  "security_user"    = ["aws_security"]
+  "operations_user"  = ["aws_operations"]
+  "operations_user2" = ["aws_operations"]
 }
 
 # List of Groups added to our configuration
