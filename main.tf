@@ -89,7 +89,7 @@ module "mybucket" {
 module "flow_logs" {
   source        = "./modules/VPC/flow_logs"
   s3_bucket_arn = module.mybucket.s3_bucket_arn
-  vpc_id        = module.network.vpc_ids["virginia"]
+  vpc_id        = module.network.vpc_ids
   depends_on    = [module.mybucket]
 }
 
