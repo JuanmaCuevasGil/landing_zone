@@ -6,6 +6,6 @@ resource "aws_instance" "vpn" {
   vpc_security_group_ids = [var.sg_ids["vpn"]]
   user_data              = local.vpn
   tags = {
-    "Name" = "${"vpn"}-${var.suffix}"
+    "Name" = "${"vpn"}"
   }
 }

@@ -49,7 +49,7 @@ locals {
   #firewall-cmd --zone=public --add-service=ssh --permanent
   #firewall-cmd --zone=public --add-service=openvpn --permanent
   #firewall-cmd --reload
-  y | scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/
+  scp -i /.ssh/${var.keys.key_name["vpn"]}.pem ubuntu@${var.vpn_ip}:/home/ubuntu/jumpserver.ovpn /home/ubuntu/
   openvpn --config /home/ubuntu/jumpserver.ovpn
   EOF
    vpn = <<-EOF

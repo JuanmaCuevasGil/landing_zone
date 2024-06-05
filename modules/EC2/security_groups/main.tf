@@ -1,81 +1,27 @@
 # Creates a security group for a specific VPC, allowing SSH access from any IP and permitting all outbound traffic. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "public" {
-  name        = "Public Instance SG"
-  description = "Allow SSH, IMCP, HTTP, HTTPS inbound traffic and ALL egress traffic"
-  vpc_id      = var.vpc_ids["virginia"]
+resource "aws_security_group" "sg" {
+  for_each = var.ports
+  name     = each.key
+  vpc_id   = each.key == "vpn" ? var.vpc_ids["vpn"] : var.vpc_ids["virginia"]
 
   dynamic "ingress" {
     # Remove cases any and default from our list because they deny or allow all traffic and we need to specify
-    for_each = {
-      for key, value in var.ports : key => value
-      if key != "any" && key != "default"
-    }
+    for_each = [  ]
     content {
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
+      from_port   = each.value["from_port"]
+      to_port     = each.value["to_port"]
+      protocol    = each.value["protocol"]
       cidr_blocks = [var.cidr_map["any"]]
     }
   }
   egress {
-    from_port   = var.ports["default"].port
-    to_port     = var.ports["default"].port
-    protocol    = var.ports["default"].protocol
+    from_port   = var.ports[each.key].egress["from_port"]
+    to_port     = var.ports[each.key].egress["to_port"]
+    protocol    = var.ports[each.key].egress["protocol"]
     cidr_blocks = [var.cidr_map["any"]]
   }
 
   tags = {
-    "Name" = "SG-PubSub-Virginia"
-  }
-}
-
-# Creates a security group for a specific VPC, allowing SSH access from any IP. It dynamically sets up inbound rules based on a list of ports, and tags the security group with a name that includes a variable suffix.
-resource "aws_security_group" "private" {
-  name        = "Private Instance SG"
-  description = "Allow SSH inbound traffic and ALL egress traffic"
-  vpc_id      = var.vpc_ids["virginia"]
-
-  ingress {
-    from_port   = var.ports["ssh"].port
-    to_port     = var.ports["ssh"].port
-    protocol    = var.ports["ssh"].protocol
-    cidr_blocks = [var.private_ip]
-    # security_groups = [ aws_security_group.public_instance.id ]
-  }
-  egress {
-    from_port   = var.ports["default"].port
-    to_port     = var.ports["default"].port
-    protocol    = var.ports["default"].protocol
-    cidr_blocks = [var.cidr_map["any"]]
-  }
-  tags = {
-    "Name" = "SG-PrivSub-Virginia"
-  }
-}
-
-resource "aws_security_group" "vpn" {
-  name = "allow-all"
-  vpc_id = var.vpc_ids["vpn"]
-
-  /* ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  } */
-  ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "SG-VPN"
+    "Name" = "SG-${each.key}"
   }
 }

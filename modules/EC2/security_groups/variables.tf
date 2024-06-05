@@ -4,19 +4,28 @@ variable "cidr_map" {
 }
 
 variable "ports" {
-  description = "Map of ports used in security group"
   type = map(object({
-    port     = number
-    protocol = string
+    ingress = map(object({
+      from_port = number
+      to_port   = number
+      protocol  = string
+    }))
+    egress = object({
+      from_port = number
+      to_port   = number
+      protocol  = string
+    })
   }))
+  description = "Ports & Protocols"
 }
+
 
 variable "vpc_ids" {
   description = "ID VPC Virginia"
-  type = map(string)
+  type        = map(string)
 }
 
 variable "private_ip" {
   description = "Private IP of jumpserver"
-  type = string
+  type        = string
 }

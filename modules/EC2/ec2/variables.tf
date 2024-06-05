@@ -17,11 +17,6 @@ variable "sg_ids" {
   type        = map(string)
 }
 
-variable "suffix" {
-  description = "Suffix to append to instance names"
-  type        = string
-}
-
 variable "keys" {
   description = "Keys configuration values"
   type = object({
