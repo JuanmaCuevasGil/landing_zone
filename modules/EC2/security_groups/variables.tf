@@ -25,8 +25,3 @@ variable "vpc_ids" {
   description = "ID VPC Virginia"
   type        = map(string)
 }
-
-variable "private_ip" {
-  description = "Private IP of jumpserver"
-  type        = string
-}

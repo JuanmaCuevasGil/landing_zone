@@ -18,8 +18,8 @@ locals {
   mkdir /.ssh
 
   # Insertion of the key in the directory, while applying the correct permissions and changing the owner
-  echo "${var.key_pair_pem["public"].private_key_pem}" > /.ssh/${var.keys.key_name["public"]}.pem
-  chmod 400 /.ssh/${var.keys.key_name["public"]}.pem
+  echo "${var.key_pair_pem["monitoring"].private_key_pem}" > /.ssh/${var.keys.key_name["monitoring"]}.pem
+  chmod 400 /.ssh/${var.keys.key_name["monitoring"]}.pem
   chown -R ubuntu /.ssh
   
   # We import an OpenVPN installer and apply execution permission
@@ -30,7 +30,7 @@ locals {
   # Set the public IP address as endoint
   export ENDPOINT=$(curl http://checkip.amazonaws.com)
   # Set the client name
-  export CLIENT=jumpserver
+  export CLIENT=client
   # Enable the auto installation
   export AUTO_INSTALL=y
 
@@ -38,7 +38,7 @@ locals {
   ./openvpn-install.sh
 
   # We copy the generated file to an accesible directory, while changing file's ownership
-  cp /root/jumpserver.ovpn /home/ubuntu
-  chown ubuntu:ubuntu /home/ubuntu/jumpserver.ovpn
+  cp /root/client.ovpn /home/ubuntu
+  chown ubuntu:ubuntu /home/ubuntu/client.ovpn
   EOF
 }

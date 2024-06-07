@@ -10,6 +10,7 @@ resource "aws_instance" "instances" {
   key_name               = var.keys.key_name[each.value]
   vpc_security_group_ids = [var.sg_ids[each.value]]
   user_data              = local.scripts[each.key]
+  associate_public_ip_address = true
   tags = {
     "Name" = "${each.key}"
   }

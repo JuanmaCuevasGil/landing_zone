@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "aws_security" {
       "ec2-instance-connect:SendSSHPublicKey"
     ]
     resources = [
-      "${var.jumpserver_arn}"]
+      "${var.monitoring_arn}"]
   }
 
   statement {
@@ -86,7 +86,7 @@ data "aws_iam_policy_document" "aws_operations" {
       "ec2-instance-connect:SendSSHPublicKey"
     ]
     resources = [
-      "${var.jumpserver_arn}"]
+      "${var.monitoring_arn}"]
   }
 
   statement {

@@ -86,3 +86,14 @@ variable "keys" {
     key_name  = map(string)
   })
 }
+
+variable "vpcs" {
+  type = map(string)
+}
+
+variable "subnets" {
+  type = map(object({
+    vpc  = string
+    cidr = string
+  }))
+}

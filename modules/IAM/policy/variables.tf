@@ -3,8 +3,8 @@ variable "s3_bucket_arn" {
   type = string
 }
 
-variable "jumpserver_arn" {
-  description = "Jumpserver ARN"
+variable "monitoring_arn" {
+  description = "Monitoring ARN"
   type = string
 }
 

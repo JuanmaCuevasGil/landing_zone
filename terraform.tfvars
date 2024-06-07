@@ -12,81 +12,56 @@ cidr_map = {
   vpn_subnet = "10.20.1.0/24"
 }
 
+vpcs = {
+  virginia = "10.10.0.0/16"
+  vpn = "10.20.0.0/16"
+}
+
+subnets = {
+  public = {
+      vpc  = "virginia"
+      cidr = "10.10.1.0/24"
+    }
+    monitoring = {
+      vpc  = "virginia"
+      cidr = "10.10.2.0/24"
+    }
+    vpn = {
+      vpc  = "vpn"
+      cidr = "10.20.1.0/24"
+    }
+}
+
+
 # The ports are saved in a variable that is accessed first by the VPN network type and
 # within the types we have another map for ingress and egress to be able to access 
 # dynamically when creating the security groups
 ports = {
   public = {
     ingress = {
-      icmp = {
-        from_port = -1
-        to_port   = -1
-        protocol  = "icmp"
-      }
-      ssh = {
-        from_port = 22
-        to_port   = 22
-        protocol  = "tcp"
-      }
-      http = {
-        from_port = 80
-        to_port   = 80
-        protocol  = "tcp"
-      }
-      https = {
-        from_port = 443
-        to_port   = 443
-        protocol  = "tcp"
-      }
-      openvpn = {
-        from_port = 1194
-        to_port   = 1194
-        protocol  = "udp"
-      }
+      icmp    = { from_port = -1, to_port = -1, protocol = "icmp" },
+      ssh     = { from_port = 22, to_port = 22, protocol = "tcp" },
+      http    = { from_port = 80, to_port = 80, protocol = "tcp" },
+      https   = { from_port = 443, to_port = 443, protocol = "tcp" },
+      openvpn = { from_port = 1194, to_port = 1194, protocol = "udp" }
     }
-    egress = {
-      from_port = 0
-      to_port   = 0
-      protocol  = "-1"
-    }
+    egress = { from_port = 0, to_port = 0, protocol = "-1" }
   }
-  private = {
+  monitoring = {
     ingress = {
-      ssh = {
-        from_port = 22,
-        to_port   = 22,
-        protocol  = "tcp"
-      }
+      ssh     = { from_port = 22, to_port = 22, protocol = "tcp" },
+      icmp    = { from_port = -1, to_port = -1, protocol = "icmp" },
+      openvpn = { from_port = 1194, to_port = 1194, protocol = "udp" }
     }
-    egress = {
-      from_port = 0,
-      to_port   = 0,
-      protocol  = "-1"
-    }
+    egress = { from_port = 0, to_port = 0, protocol = "-1" }
   }
   vpn = {
     ingress = {
-      all = {
-        from_port = 0,
-        to_port   = 65535,
-        protocol  = "tcp"
-      },
-      icmp = {
-        from_port = -1,
-        to_port   = -1,
-        protocol  = "icmp"
-      }
-      openvpn = {
-        from_port = 1194
-        to_port   = 1194
-        protocol  = "udp"
-      }
+      all     = { from_port = 0, to_port = 65535, protocol = "tcp" },
+      icmp    = { from_port = -1, to_port = -1, protocol = "icmp" },
+      openvpn = { from_port = 1194, to_port = 1194, protocol = "udp" }
     }
-    egress = {
-      from_port = 0,
-      to_port   = 0,
-      protocol  = "-1"
-    }
+    egress = { from_port = 0, to_port = 0, protocol = "-1" }
   }
 }
 
@@ -110,18 +85,17 @@ ec2_specs = {
   instances = {
     apache     = "public"
     mysql      = "public"
-    jumpserver = "public"
-    monitoring = "private"
+    monitoring = "monitoring"
     vpn        = "vpn"
   }
 }
 
 # Users membership associations to groups
 iam_users = {
-  "admin_user"       = ["aws_admin"]
-  "billing_user"     = ["aws_billing"]
-  "security_user"    = ["aws_security"]
-  "operations_user"  = ["aws_operations"]
+  "admin_user"      = ["aws_admin"]
+  "billing_user"    = ["aws_billing"]
+  "security_user"   = ["aws_security"]
+  "operations_user" = ["aws_operations"]
 }
 
 # List of Groups added to our configuration
@@ -138,7 +112,7 @@ keys = {
   rsa_bits  = 4096
   key_name = {
     public  = "SSH-Virginia-Public"
-    private = "SSH-Virginia-Private"
+    monitoring = "SSH-Virginia-Monitoring"
     vpn     = "SSH-Virginia-VPN"
   }
 }
@@ -187,8 +161,8 @@ budgets = [
         budget_subscriber_email_addresses = ["another@yopmail.com"]
       }
     ]
-  },
-  {
+  }
+/*   {
     budget_name              = "TheRule"
     budget_limit_amount      = "1000.00"
     budget_time_period_start = "2023-01-01_00:00"
@@ -202,5 +176,5 @@ budgets = [
         budget_subscriber_email_addresses = ["anormadi@yopmail.com"]
       }
     ]
-  }
+  } */
 ]

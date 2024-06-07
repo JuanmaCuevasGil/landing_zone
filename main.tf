@@ -20,7 +20,7 @@ module "policy" {
   source         = "./modules/IAM/policy"
   s3_bucket_arn  = module.mybucket.s3_bucket_arn
   iam_group      = var.iam_groups
-  jumpserver_arn = module.vpn.vpn_arn
+  monitoring_arn = module.myinstances.instance_arns["monitoring"]
   depends_on = [ module.iam_groups ]
 }
 
@@ -30,6 +30,8 @@ module "policy" {
 module "network" {
   source              = "./modules/VPC/vpc"
   cidr_map            = var.cidr_map
+  vpcs = var.vpcs
+  subnets = var.subnets
 }
 
 ###############---- MODULE Security Groups ----###############
@@ -39,7 +41,6 @@ module "security_groups" {
   ports      = var.ports
   vpc_ids    = module.network.vpc_ids
   cidr_map   = var.cidr_map
-  private_ip = module.network.subnet_ids["public"]
 }
 
 ###############---- MODULE EC2 ----###############
